@@ -1,0 +1,12 @@
+<div>
+    <h2>All Available Tourneys</h2>
+    <div *ngIf="!tourneys || tourneys.length === 0">
+        <h3>No tournaments available.</h3>
+        <a routerLink="/createtourney">Create a tournament.</a>
+    </div>
+    <ol *ngIf="tourneys.length > 0">
+        <li *ngFor='let tourney of tourneys'>
+            <a routerLink="/tourney/{{tourney.id}}">{{tourney.name}}</a>
+        </li>
+    </ol>
+</div>
