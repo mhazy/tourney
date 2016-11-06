@@ -1,5 +1,5 @@
 # Tourney
-Tourney app for foosball (possibly more)
+Tournament scheduling app for foosball.
 
 # Install
 npm install
