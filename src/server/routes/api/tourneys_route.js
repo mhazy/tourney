@@ -62,6 +62,59 @@ router.put('/', function(request, response){
 });
 
 /*
+ * Add player to tournament.
+ */
+router.put('/:tourneyId/user/:userId', function(request, response){
+  var updatedTourney;
+  var tourneyId = +request.params.tourneyId;
+  var userId = +request.params.userId;
+  var responseMessage = {};
+  var currentPlayers;
+  updatedTourney = tourneys.find( tourney => tourney.id === tourneyId);
+  if(updatedTourney){
+    currentPlayers = updatedTourney.players ? updatedTourney.players : [];
+    if(!currentPlayers.includes(userId)){
+      currentPlayers.push(userId);
+      updatedTourney.players = currentPlayers;
+      responseMessage.status = 'success';
+      responseMessage.message = 'Player successfully added to the tournament.';
+    }else{
+      responseMessage.status = 'warning';
+      responseMessage.message = 'This player is already in the tournament.';
+    }
+  }
+  response.setHeader('Content-Type', 'application/json');
+  response.send(JSON.stringify(responseMessage));
+});
+
+/*
+ * Remove player from tournament.
+ */
+router.delete('/:tourneyId/user/:userId', function(request, response){
+  var tourneyId = +request.params.tourneyId;
+  var userId = +request.params.userId;
+  var responseMessage = {};
+  responseMessage.status = 'fail';
+  responseMessage.message = 'Cannot find required tournament.';
+  tourneys = tourneys.map(
+    tourney => {
+      if(tourney.id === tourneyId){
+        responseMessage.status = 'warning';
+        responseMessage.message = 'This tournament has no players to remove.';
+        if(tourney.players){
+          tourney.players = tourney.players.filter(player => player !== userId);
+          responseMessage.status = 'success';
+          responseMessage.message = 'Player was removed from the tournament.';
+        }
+      }
+      return tourney;
+    }
+  );
+  response.setHeader('Content-Type', 'application/json');
+  response.send(JSON.stringify(responseMessage));
+});
+
+/*
  * Create a new tourney with given information.
  */
 router.post('/', function (request, response){

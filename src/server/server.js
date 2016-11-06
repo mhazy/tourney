@@ -31,7 +31,7 @@ app.use(function(request, response, next) {
  * Handle static content.
  * This will serve up whatever is located in /public directory.
  */
-app.use(express.static('public'));
+app.use(express.static(__dirname + '/public'));
 
 /*
  * Handle favicon request.
@@ -50,7 +50,7 @@ app.get('/', function(request, response){
  * Handle /api request.
  * Serve api documentation page.
  */
-app.use('/api', express.static('./public/api.html'));
+app.use('/api', express.static(__dirname + '/public/api.html'));
 
 /*
  * Handle tourneys api calls.
