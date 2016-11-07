@@ -31,6 +31,7 @@ export class CreateTourneyContainer implements OnInit{
     }
     
     constructor(
+        private location: Location,
         private router: Router,
         private route: ActivatedRoute,
         private tourneyService: TourneyService,
@@ -170,9 +171,12 @@ export class CreateTourneyContainer implements OnInit{
 
     createTourney(newTourney: Tourney): void {
         if(this.isEdit){
-            this.tourneyService.updateTourney(newTourney).then(tourney=>console.log('updated tourney'));
+            this.tourneyService.updateTourney(newTourney).then(tourney=>console.log('updated tourney')).then(()=>alert('updated'));
         }else {
-            this.tourneyService.createTourney(newTourney).then(tourney=>console.log('created new tourney'));
+            this.tourneyService.createTourney(newTourney).then(tourney=>console.log('created new tourney')).then(() => this.goBack());
         }
+    }
+    goBack(): void {
+      this.location.back();
     }
 }

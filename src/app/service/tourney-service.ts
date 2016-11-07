@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { Tourney } from './classes/Tourney';
+import { ResponseMessage } from './classes/ResponseMessage';
 import { Headers, Http } from '@angular/http';
 import 'rxjs/add/operator/toPromise';
 
@@ -23,7 +24,7 @@ export class TourneyService {
         .post(url, JSON.stringify(tourney), {'headers': this.headers})
         .toPromise()
         .then(() => { 
-            console.log('created'); this.router.navigate(['/viewtourneys']);return undefined; 
+            console.log('created'); return undefined; 
         })
         .catch(this.handleCreateTourneyError);
     }
@@ -34,7 +35,7 @@ export class TourneyService {
         .delete(url)
         .toPromise()
         .then(() => { 
-            console.log('deleted'); this.router.navigate(['/viewtourneys']);return undefined; 
+            console.log('deleted'); return undefined; 
         })
         .catch(this.handleDeleteTourneyError);
     }
@@ -58,12 +59,40 @@ export class TourneyService {
     }
 
     getTourney(tourneyId: number): Promise<Tourney> {
-         const url = `${this.tourneyAPIUrl}${tourneyId}`;
+        const url = `${this.tourneyAPIUrl}${tourneyId}`;
         return this.http
         .get(url)
         .toPromise()
         .then(response => response.json())
         .catch(this.handleGetTourneyError);
+    }
+
+    joinTourney(tourneyId: number, userId: number): Promise<ResponseMessage> {
+        const url = `${this.tourneyAPIUrl}${tourneyId}/user/${userId}`;
+        return this.http
+        .put(url, '{}', {'headers': this.headers})
+        .toPromise()
+        .then(response => response.json())
+        .catch(this.handleJoinTourneyError);
+    }
+
+    leaveTourney(tourneyId: number, userId: number): Promise<ResponseMessage> {
+        const url = `${this.tourneyAPIUrl}${tourneyId}/user/${userId}`;
+        return this.http
+        .delete(url)
+        .toPromise()
+        .then(response => response.json())
+        .catch(this.handleLeaveTourneyError);
+    }
+
+    private handleLeaveTourneyError(error: any): Promise<ResponseMessage> {
+        console.log('An error occured = ', JSON.stringify(error));
+        return Promise.resolve({status:'fail', message: JSON.stringify(error)});
+    }
+
+    private handleJoinTourneyError(error: any): Promise<ResponseMessage> {
+        console.log('An error occured = ', JSON.stringify(error));
+        return Promise.resolve({status:'fail', message: JSON.stringify(error)});
     }
 
     private handleDeleteTourneyError(error: any): Promise<Tourney> {

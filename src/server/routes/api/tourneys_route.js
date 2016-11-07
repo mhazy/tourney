@@ -73,9 +73,13 @@ router.put('/:tourneyId/user/:userId', function(request, response){
   updatedTourney = tourneys.find( tourney => tourney.id === tourneyId);
   if(updatedTourney){
     currentPlayers = updatedTourney.players ? updatedTourney.players : [];
-    if(!currentPlayers.includes(userId)){
+    if(currentPlayers.length === updatedTourney.participants.max){
+      responseMessage.status = 'fail';
+      responseMessage.message = 'Tournament is full.';
+    }else if(!currentPlayers.includes(userId)){
       currentPlayers.push(userId);
       updatedTourney.players = currentPlayers;
+      updatedTourney.participants.current = currentPlayers.length;
       responseMessage.status = 'success';
       responseMessage.message = 'Player successfully added to the tournament.';
     }else{
@@ -103,6 +107,7 @@ router.delete('/:tourneyId/user/:userId', function(request, response){
         responseMessage.message = 'This tournament has no players to remove.';
         if(tourney.players){
           tourney.players = tourney.players.filter(player => player !== userId);
+          tourney.participants.current = tourney.players.length;
           responseMessage.status = 'success';
           responseMessage.message = 'Player was removed from the tournament.';
         }

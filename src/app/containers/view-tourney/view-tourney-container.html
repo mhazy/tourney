@@ -5,6 +5,8 @@
     <div *ngIf="tourney">
         <a routerLink="/edittourney/{{tourney.id}}">Edit</a>
         <button (click)="onDelete()">Delete</button>
+        <button (click)="onJoin()">Join</button>
+        <button (click)="onLeave()">Leave</button>
         <h2>{{tourney.name}}</h2>
         <p>{{tourney.description}}</p>
         <div>
