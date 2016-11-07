@@ -5,6 +5,8 @@ import { Location } from '@angular/common';
 import { Tourney } from '../../service/classes/tourney';
 import { TourneyService } from '../../service/tourney-service';
 
+import * as marked from 'marked';
+
 @Component({
   selector: 'view-tourney-container',
   templateUrl: './src/app/containers/view-tourney/view-tourney-container.html',
@@ -17,8 +19,11 @@ export class ViewTourneyContainer implements OnInit {
     email: 'john.doe@foo.bar'
   }; //MOCK USER @TODO add user service
 
+  md = marked.setOptions({});
+
   ngOnInit(): void {
     this.getTourney();
+    //this.md = marked.setOptions({});
   }
 
   constructor(
@@ -32,7 +37,14 @@ export class ViewTourneyContainer implements OnInit {
       (params: Params) => {
         let id = +params['id']; //+ converts the value to a number
         this.tourneyService.getTourney(id)
-          .then(tourney => {console.log('go tourney = ' + JSON.stringify(tourney)); this.tourney = tourney})
+          .then(
+            tourney => {
+              console.log('go tourney = ' + JSON.stringify(tourney));
+               this.tourney = tourney;
+               // @TODO sanatise the rules before they get marked?
+               //this.tourney.rules = this.md.parse(this.tourney.rules);
+            }
+          )
           .catch(() => {console.log('error getting all tourney'); return {}});
       }
     )

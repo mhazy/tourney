@@ -25,8 +25,18 @@ export class CreateTourneyContainer implements OnInit{
             }
             this.isEdit = true;
             this.tourneyService.getTourney(id)
-            .then(tourney => {console.log('go tourney = ' + JSON.stringify(tourney)); this.newTourney = tourney; this.initForm()})
-            .catch(() => {console.log('error getting all tourney'); return {}});
+            .then(
+                tourney => {
+                    console.log('go tourney = ' + JSON.stringify(tourney));
+                    this.newTourney = tourney; this.initForm()
+                }
+            )
+            .catch(
+                () => {
+                    console.log('error getting all tourney');
+                    return {};
+                }
+            );
         })
     }
     
@@ -171,11 +181,23 @@ export class CreateTourneyContainer implements OnInit{
 
     createTourney(newTourney: Tourney): void {
         if(this.isEdit){
-            this.tourneyService.updateTourney(newTourney).then(tourney=>console.log('updated tourney')).then(()=>alert('updated'));
+            this.tourneyService
+            .updateTourney(newTourney)
+            .then(tourney => console.log('updated tourney'))
+            .then(
+                () => alert('updated')
+            )
+            .then(
+                () => this.router.navigate(['/tourney/' + this.newTourney.id])
+            );
         }else {
-            this.tourneyService.createTourney(newTourney).then(tourney=>console.log('created new tourney')).then(() => this.goBack());
+            this.tourneyService
+            .createTourney(newTourney)
+            .then(tourney => console.log('created new tourney'))
+            .then(() => this.goBack());
         }
     }
+
     goBack(): void {
       this.location.back();
     }
