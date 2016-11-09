@@ -1,0 +1,18 @@
+{
+  "name": "tourney",
+  "version": "1.0.0",
+  "description": "Tournament App API",
+  "main": "index.js",
+  "scripts": {
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.14.0",
+    "express-jwt": "^5.1.0",
+    "mongodb": "^2.2.10",
+    "mongoose": "^4.6.1"
+  },
+  "devDependencies": {
+  }
+}
