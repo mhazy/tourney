@@ -1,0 +1,77 @@
+<div>
+  <h2 *ngIf="!isEdit">Create New Tournament</h2>
+  <h2 *ngIf="isEdit">Edit Tournament</h2>
+  <form (ngSubmit)="onSubmit()" [formGroup]="createTourneyForm">
+    <div>
+      <h3>Name</h3>
+      <input type="text" name="newTourneyName" formControlName="name" style="text-align: center;">
+    </div>
+    <div>
+      <h3>Description</h3>
+      <textarea formControlName="description"></textarea>
+    </div>
+    <div>
+      <h3>Rules</h3>
+      <textarea formControlName="rules"></textarea>
+    </div>
+    <div formGroupName="registration">
+      <h3>Registration</h3>
+      <div>
+        <label>Start Date</label>
+        <input type="date" name="newTourneyRegistrationStartDate" formControlName="start">
+      </div>
+      <div>
+        <label>End Date</label>
+        <input type="date" name="newTourneyRegistrationEndDate" formControlName="end">
+      </div>
+    </div>
+    <div formGroupName="duration">
+      <h3>Duration</h3>
+      <div>
+        <label>Start Date</label>
+        <input type="date" name="newTourneyDurationStartDate" formControlName="start">
+      </div>
+      <div>
+        <label>End Date</label>
+        <input type="date" name="newTrouneyDurationEndDate" formControlName="end">
+      </div>
+    </div>
+    <div formGroupName="participants">
+      <h3>Participants</h3>
+      <div>
+        <label>Min</label>
+        <input type="number" name="newTrouneyParticipantsMin" formControlName="min">
+      </div>
+      <div>
+        <label>Max</label>
+        <input type="number" name="newTrouneyParticipantsMax" formControlName="max">
+      </div>
+    </div>
+    <div>
+      <h3>Main Schedule</h3>
+      <div style="display: block;">
+        <input type="radio" name="schedule" formControlName="schedule" value="roundrobin">Round-Robin
+      </div>
+      <div style="display: block;">
+        <input type="radio" name="schedule" formControlName="schedule" value="random">Random
+      </div>
+      <div style="display: block;">
+        <input type="radio" name="schedule" formControlName="schedule" value="ladder">Ladder
+      </div>
+    </div>
+    <div>
+      <h3>Playoffs</h3>
+      <div style="display: block;">
+        <input type="radio" name="playoffs" formControlName="playoffs" value="none">None
+      </div>
+      <div style="display: block;">
+        <input type="radio" name="playoffs" formControlName="playoffs" value="bestvsworst">Best-vs-Worst
+      </div>
+    </div>
+    <div>
+      <button type="cancel">Cancel</button>
+      <button type="reset">Reset</button>
+      <button type="submit">{{isEdit ? 'Save' : 'Create'}}</button>
+    </div>
+  </form>
+</div>
