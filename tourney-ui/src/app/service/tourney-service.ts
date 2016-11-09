@@ -8,23 +8,27 @@ import 'rxjs/add/operator/toPromise';
 @Injectable()
 export class TourneyService {
   private tourneyAPIUrl = "http://localhost:8000/api/tourneys/";
-  private headers = new Headers({ 'Content-Type': 'application/json' });
+  private headers = new Headers();
 
   constructor(
     private http: Http,
     private router: Router,
     private route: ActivatedRoute
   ) {
+    this.headers.append('Authorization', 'Bearer ' + localStorage.getItem('id_token'));
+    this.headers.append('Content-Type', 'application/json');
   }
 
   createTourney(tourney: Tourney): Promise<Tourney> {
     const url = `${this.tourneyAPIUrl}`;
     console.log('posting to ' + url);
     return this.http
-      .post(url, JSON.stringify(tourney), { 'headers': this.headers })
+      .post(url, JSON.stringify(tourney), { headers: this.headers })
       .toPromise()
       .then(() => {
-        console.log('created'); return undefined;
+
+        console.log('created');
+        return undefined;
       })
       .catch(this.handleCreateTourneyError);
   }
@@ -32,7 +36,7 @@ export class TourneyService {
   deleteTourney(tourney: Tourney): Promise<Tourney> {
     const url = `${this.tourneyAPIUrl}${tourney.id}`;
     return this.http
-      .delete(url)
+      .delete(url, {headers: this.headers})
       .toPromise()
       .then(() => {
         console.log('deleted'); return undefined;
@@ -43,7 +47,7 @@ export class TourneyService {
   updateTourney(tourney: Tourney): Promise<Tourney> {
     const url = `${this.tourneyAPIUrl}`;
     return this.http
-      .put(url, JSON.stringify(tourney), { 'headers': this.headers })
+      .put(url, JSON.stringify(tourney), { headers: this.headers })
       .toPromise()
       .then(response => response.json())
       .catch(this.handleGetTourneyError);
@@ -52,7 +56,7 @@ export class TourneyService {
   getTourneys(): Promise<Tourney[]> {
     const url = `${this.tourneyAPIUrl}`;
     return this.http
-      .get(url)
+      .get(url, {headers: this.headers})
       .toPromise()
       .then(response => response.json())
       .catch(this.handleGetTourneysError);
@@ -61,7 +65,7 @@ export class TourneyService {
   getTourney(tourneyId: number): Promise<Tourney> {
     const url = `${this.tourneyAPIUrl}${tourneyId}`;
     return this.http
-      .get(url)
+      .get(url, {headers: this.headers})
       .toPromise()
       .then(response => response.json())
       .catch(this.handleGetTourneyError);
@@ -70,7 +74,7 @@ export class TourneyService {
   joinTourney(tourneyId: number, userId: number): Promise<ResponseMessage> {
     const url = `${this.tourneyAPIUrl}${tourneyId}/user/${userId}`;
     return this.http
-      .put(url, '{}', { 'headers': this.headers })
+      .put(url, '{}', { headers: this.headers })
       .toPromise()
       .then(response => response.json())
       .catch(this.handleJoinTourneyError);
@@ -79,7 +83,7 @@ export class TourneyService {
   leaveTourney(tourneyId: number, userId: number): Promise<ResponseMessage> {
     const url = `${this.tourneyAPIUrl}${tourneyId}/user/${userId}`;
     return this.http
-      .delete(url)
+      .delete(url, {headers: this.headers})
       .toPromise()
       .then(response => response.json())
       .catch(this.handleLeaveTourneyError);

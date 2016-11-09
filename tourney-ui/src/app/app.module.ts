@@ -3,6 +3,9 @@ import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 
+import { AUTH_PROVIDERS } from 'angular2-jwt';
+import { Auth } from './service/auth.service';
+
 import { AppComponent } from './app.component';
 import { routing } from './app.routing';
 
@@ -28,6 +31,8 @@ import { TourneyService } from './service/tourney-service';
   bootstrap: [AppComponent],
   providers: [
     TourneyService,
+    Auth,
+    AUTH_PROVIDERS
   ]
 })
 export class AppModule { }

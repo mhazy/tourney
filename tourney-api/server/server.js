@@ -1,6 +1,5 @@
 var express = require('express');
 var jwt = require('express-jwt');
-var favicon = require('serve-favicon');
 var tourneysRouter = require('./routes/api/tourneys_route');
 
 var app = express();
@@ -21,7 +20,7 @@ var jwtCheck = jwt({
  */
 app.use(function(request, response, next) {
   response.setHeader("Access-Control-Allow-Origin", "*");
-  response.setHeader("Access-Control-Allow-Headers", "X-Requested-With, X-HTTP-Method-Override, Content-Type, Accept");
+  response.setHeader("Access-Control-Allow-Headers", "X-Requested-With, X-HTTP-Method-Override, Content-Type, Accept, Authorization");
   response.setHeader("Access-Control-Max-Age", '86400'); // 24 hours
   if (request.method === 'OPTIONS') {
     response.setHeader("Access-Control-Allow-Methods", "POST, GET, PUT, DELETE, OPTIONS");
@@ -43,11 +42,6 @@ app.use(express.static(__dirname + '/public'));
 * Secure API and require authorization
 */
 app.use('/api', jwtCheck);
-
-/*
- * Handle favicon request.
- */
-app.use(favicon(__dirname + '/public/favicon.ico'));
 
 /*
  * Handle confused requests.
