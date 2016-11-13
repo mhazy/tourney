@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Params, Router } from '@angular/router';
+import { ActivatedRoute, Params } from '@angular/router';
 import { Location } from '@angular/common';
 
-import { Tourney } from '../../service/classes/tourney';
+import { Tourney } from '../../models/tourney-model';
 import { TourneyService } from '../../service/tourney-service';
 
 @Component({
@@ -15,7 +15,7 @@ export class ViewTourneyContainer implements OnInit {
     id: 0,
     name: 'John Doe',
     email: 'john.doe@foo.bar'
-  }; //MOCK USER @TODO add user service
+  }; // MOCK USER @TODO add user service
 
   ngOnInit(): void {
     this.getTourney();
@@ -30,19 +30,22 @@ export class ViewTourneyContainer implements OnInit {
   private getTourney(): void {
     this.route.params.forEach(
       (params: Params) => {
-        let id = +params['id']; //+ converts the value to a number
+        let id = +params['id']; // + converts the value to a number
         this.tourneyService.getTourney(id)
           .then(
           tourney => {
             console.log('go tourney = ' + JSON.stringify(tourney));
             this.tourney = tourney;
             // @TODO sanatise the rules before they get marked?
-            //this.tourney.rules = this.md.parse(this.tourney.rules);
+            // this.tourney.rules = this.md.parse(this.tourney.rules);
           }
           )
-          .catch(() => { console.log('error getting all tourney'); return {} });
+          .catch(() => {
+            console.log('error getting all tourney');
+            return {};
+          });
       }
-    )
+    );
   }
 
   onJoin(): void {

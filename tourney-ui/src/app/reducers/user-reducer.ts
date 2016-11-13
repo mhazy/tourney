@@ -1,0 +1,24 @@
+import { ActionReducer, Action } from '@ngrx/store';
+
+import { User } from '../models/user-model';
+import { UserActions } from '../actions/user-actions';
+
+export type UserState = User;
+
+const initState: UserState = {
+  id: -1,
+  name: '',
+  email: '',
+  authToken: ''
+};
+
+export const UserReducer = (state: UserState = initState, action: Action) => {
+  switch (action.type) {
+    case UserActions.USER_LOGGED_IN_ACTION:
+      return action.payload;
+    case UserActions.USER_LOGGED_OUT_ACTION:
+      return initState;
+    default:
+      return state;
+    }
+};

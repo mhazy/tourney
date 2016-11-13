@@ -9,15 +9,18 @@
   <nav class="navbar navbar-default">
   <div class="container-fluid">
     <div class="navbar-header">
-      <a class="navbar-brand" href="#">Auth0 - Angular 2</a>
+      <span *ngIf="!user || !user.authToken">Welcome, friend!</span>
+      <span *ngIf="user && user.authToken">Welcome, {{ user.name }}!</span>
       <button class="btn btn-primary btn-margin" (click)="auth.login()" *ngIf="!auth.authenticated()">Log In</button>
       <button class="btn btn-primary btn-margin" (click)="auth.logout()" *ngIf="auth.authenticated()">Log Out</button>
     </div>
   </div>
 </nav>
 </div>
-<div>
-  <a routerLink="/viewtourneys">View Tournaments</a>
-  <a routerLink="/createtourney">Create New Tournament</a>
+<div *ngIf="user && user.authToken">
+  <div>
+    <a routerLink="/viewtourneys">View Tournaments</a>
+    <a routerLink="/createtourney">Create New Tournament</a>
+  </div>
 </div>
 <router-outlet></router-outlet>

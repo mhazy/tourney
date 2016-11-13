@@ -3,7 +3,7 @@ import { ActivatedRoute, Params, Router } from '@angular/router';
 import { Location } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
 
-import { Tourney } from '../../service/classes/tourney';
+import { Tourney } from '../../models/tourney-model';
 import { TourneyService } from '../../service/tourney-service';
 
 
@@ -12,14 +12,14 @@ import { TourneyService } from '../../service/tourney-service';
   templateUrl: './create-tourney-container.html',
 })
 export class CreateTourneyContainer implements OnInit {
-  newTourney: Tourney = new Tourney();
+  newTourney: Tourney;
   isEdit: boolean = false;
   createTourneyForm: FormGroup;
   formBuilder: FormBuilder;
 
   ngOnInit(): void {
     this.route.params.forEach((params: Params) => {
-      let id = +params['id']; //+ converts the value to a number
+      let id = +params['id']; // + converts the value to a number
       if (!id && id !== 0) {
         return;
       }
@@ -28,7 +28,7 @@ export class CreateTourneyContainer implements OnInit {
         .then(
         tourney => {
           console.log('go tourney = ' + JSON.stringify(tourney));
-          this.newTourney = tourney; this.initForm()
+          this.newTourney = tourney; this.initForm();
         }
         )
         .catch(
@@ -37,7 +37,7 @@ export class CreateTourneyContainer implements OnInit {
           return {};
         }
         );
-    })
+    });
   }
 
   constructor(
@@ -121,7 +121,7 @@ export class CreateTourneyContainer implements OnInit {
         [
         ]
       ]
-    })
+    });
   }
 
   private validateInteger(min: Number = 0, max: Number = Number.MAX_SAFE_INTEGER) {
@@ -134,8 +134,8 @@ export class CreateTourneyContainer implements OnInit {
               valid: false
             }
           }
-      )
-    }
+      );
+    };
   }
 
   private getCurrentDate(): string {
@@ -171,8 +171,7 @@ export class CreateTourneyContainer implements OnInit {
       },
       schedule: this.createTourneyForm.value.schedule,
       playoffs: this.createTourneyForm.value.playoffs,
-
-    }
+    };
     console.log('form submitted:');
     console.log(JSON.stringify(this.newTourney));
     this.createTourney(this.newTourney);

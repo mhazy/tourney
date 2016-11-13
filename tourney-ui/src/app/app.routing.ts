@@ -1,5 +1,6 @@
 import { ModuleWithProviders } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
+import { WelcomePageContainer } from './containers/welcome-page/welcome-page-container';
 import { CreateTourneyContainer } from './containers/create-tourney/create-tourney-container';
 import { ViewTourneysContainer } from './containers/view-tourneys/view-tourneys-container';
 import { ViewTourneyContainer } from './containers/view-tourney/view-tourney-container';
@@ -7,8 +8,7 @@ import { ViewTourneyContainer } from './containers/view-tourney/view-tourney-con
 const appRoutes: Routes = [
   {
     path: '',
-    redirectTo: '/viewtourneys',
-    pathMatch: 'full',
+    component: WelcomePageContainer,
   },
   {
     path: 'createtourney',

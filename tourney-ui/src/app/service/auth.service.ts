@@ -1,6 +1,9 @@
 import { Injectable } from '@angular/core';
+import { Store } from '@ngrx/store';
 import { tokenNotExpired } from 'angular2-jwt';
 import { myConfig } from './auth.config';
+import { UserActions } from '../actions/user-actions';
+import { AppState } from '../reducers';
 
 // Avoid name not found warnings
 declare var Auth0Lock: any;
@@ -10,7 +13,9 @@ export class Auth {
   // Configure Auth0
   lock = new Auth0Lock(myConfig.clientID, myConfig.domain, {});
 
-  constructor() {
+  constructor(
+    private store: Store<AppState>,
+    private userActions: UserActions) {
     // Add callback for lock `authenticated` event
     this.lock.on('authenticated', (authResult) => {
       localStorage.setItem('id_token', authResult.idToken);
