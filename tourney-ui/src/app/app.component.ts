@@ -4,6 +4,7 @@ import { Observable } from 'rxjs/Observable';
 import { Auth } from './service/auth.service';
 import { AppState } from './reducers';
 import { User } from './models/user-model';
+import { UserActions } from './actions/user-actions';
 
 @Component({
   selector: 'app-root',
@@ -11,15 +12,19 @@ import { User } from './models/user-model';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  public userOb;
-  public user;
-  constructor(private store: Store<AppState>, private auth: Auth) {
-    store.select('user').forEach(
-      user => {
-        console.log('!!!user = ');
-        console.log(user);
-        this.user = user;
-      }
-    );
+  private user;
+  constructor(
+    private store: Store<AppState>,
+    private userActions: UserActions,
+    private auth: Auth) {
+    store.select('user').subscribe(user => this.user = user);
+  }
+
+  private login() {
+    this.auth.login();
+  }
+
+  private logout() {
+    this.auth.logout();
   }
 }

@@ -9,10 +9,22 @@
   <nav class="navbar navbar-default">
   <div class="container-fluid">
     <div class="navbar-header">
-      <span *ngIf="!user || !user.authToken">Welcome, friend!</span>
-      <span *ngIf="user && user.authToken">Welcome, {{ user.name }}!</span>
-      <button class="btn btn-primary btn-margin" (click)="auth.login()" *ngIf="!auth.authenticated()">Log In</button>
-      <button class="btn btn-primary btn-margin" (click)="auth.logout()" *ngIf="auth.authenticated()">Log Out</button>
+      <div *ngIf="!user || !user.authToken">
+        <span>Welcome, friend!</span>
+        <button
+          class="btn btn-primary btn-margin"
+          (click)="login()">
+          Log In
+        </button>
+      </div>
+      <div *ngIf="user && user.authToken">
+        <span>Welcome, {{ user.name }}!</span>
+        <button
+          class="btn btn-primary btn-margin"
+          (click)="logout()">
+          Log Out
+        </button>
+      </div>
     </div>
   </div>
 </nav>

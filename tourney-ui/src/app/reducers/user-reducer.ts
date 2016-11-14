@@ -12,7 +12,7 @@ const initState: UserState = {
   authToken: ''
 };
 
-export const UserReducer = (state: UserState = initState, action: Action) => {
+export const UserReducer: ActionReducer<UserState> = (state: UserState = initState, action: Action) => {
   switch (action.type) {
     case UserActions.USER_LOGGED_IN_ACTION:
       return action.payload;

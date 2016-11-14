@@ -10,10 +10,10 @@ export class UserActions {
   static USER_LOG_IN_ACTION = 'USER-LOG-IN-ACTION';
   static USER_LOG_OUT_ACTION = 'USER-LOG-OUT-ACTION';
 
-  userLoggedInAction(authToken: string): Action {
+  userLoggedInAction(user: User): Action {
     return {
       type: UserActions.USER_LOGGED_IN_ACTION,
-      payload: authToken
+      payload: user
     };
   }
 
@@ -30,10 +30,9 @@ export class UserActions {
     };
   }
 
-  userLogInAction(authCallback: Function): Action {
+  userLogInAction(): Action {
     return {
       type: UserActions.USER_LOG_IN_ACTION,
-      payload: authCallback
     };
   }
 
