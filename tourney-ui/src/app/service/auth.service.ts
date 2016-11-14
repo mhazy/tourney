@@ -10,18 +10,31 @@ declare var Auth0Lock: any;
 
 @Injectable()
 export class Auth {
+  ID_TOKEN_STORAGE_ITEM = 'id_token';
+  PROFILE_STORAGE_ITEM = 'profile';
+
   // Configure Auth0
   lock = new Auth0Lock(myConfig.clientID, myConfig.domain, {});
 
   constructor(private store: Store<AppState>, private userActions: UserActions) {
-    window.addEventListener('storage', this.checkIfLocalStoreIsUpdated);
+    this.checkIfLocalStoreIsUpdated();
+    this.lock.on("authenticated", (authResult) => {
+      this.lock.getProfile(authResult.idToken, (error, profile) => {
+        if (error) {
+          // @TODO Handle error
+          return;
+        }
+        localStorage.setItem(this.ID_TOKEN_STORAGE_ITEM, authResult.idToken);
+        localStorage.setItem(this.PROFILE_STORAGE_ITEM, JSON.stringify(profile));
+        this.checkIfLocalStoreIsUpdated();
+      });
+  });
   }
 
   private checkIfLocalStoreIsUpdated() {
-    if(localStorage.getItem('id_token')){
-      console.log('i am authenticated!!!')
-      const authToken = localStorage.getItem('id_token');
-      const profile = JSON.parse(localStorage.getItem('profile'));
+    if(this.authenticated()) {
+      const authToken = localStorage.getItem(this.ID_TOKEN_STORAGE_ITEM);
+      const profile = JSON.parse(localStorage.getItem(this.PROFILE_STORAGE_ITEM));
       const user = {
         id: profile.user_id,
         name: profile.name,
@@ -30,30 +43,10 @@ export class Auth {
         authToken: authToken
       };
       this.store.dispatch(this.userActions.userLoggedInAction(user));
-    }else{
-      console.log('i am not authenticated!??');
-      this.setupAuthHook();
     }
   }
 
-  private setupAuthHook() {
-    this.lock.on('authenticated', (authResult) => {
-        localStorage.setItem('id_token', authResult.idToken);
-        this.lock.getProfile(
-          authResult.idToken,
-          function (error, profile) {
-            if (error){
-              localStorage.setItem('error', 'Error happened while logging in ' + error);
-              return;
-            }
-            localStorage.setItem('id_token', authResult.idToken);
-            localStorage.setItem('profile', JSON.stringify(profile));
-          }
-        );
-      })
-  }
   public login() {
-    // Call the show method to display the widget.
     this.lock.show();
   };
 
@@ -65,9 +58,10 @@ export class Auth {
 
   public logout() {
     // Remove token from localStorage
-    localStorage.removeItem('id_token');
-    localStorage.removeItem('profile');
+    localStorage.removeItem(this.ID_TOKEN_STORAGE_ITEM);
+    localStorage.removeItem(this.PROFILE_STORAGE_ITEM);
     this.store.dispatch(this.userActions.userLoggedOutAction());
-    window.location.href='http://' + myConfig.domain + '/v2/logout?returnTo=http%3A%2F%2Flocalhost%3A4020';
+    // @TODO log out user by redirecting them to logout page in auth0
+    //window.location.href='http://' + myConfig.domain + '/v2/logout?returnTo=http%3A%2F%2Flocalhost%3A4020';
   };
 }
