@@ -1,7 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Effect, Actions } from '@ngrx/effects';
+import { ActivatedRoute, Router } from '@angular/router';
 import { UserActions } from '../actions/user-actions';
 import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/operator/switchMap';
 import { Action } from '@ngrx/store';
 import { Auth } from '../service/auth.service';
 
@@ -12,16 +14,12 @@ export class UserEffects {
     private actions$: Actions,
     private userActions: UserActions,
     private auth: Auth,
+    private router: Router,
+    private route: ActivatedRoute,
   ) { }
 
-  //@Effect() login$ = this.actions$
-  //    .ofType(UserActions.USER_LOG_IN_ACTION)
-  //    .switchMap( () => this.auth.login())
-  //    .map(item => this.userActions.userLoggedInAction(item));
-      //.switchMap(payload => console.log('woot woot woot'))
-        // If successful, dispatch success action with result
-      //  .map(res => (userActions.userLoggedInAction('yayayaya')))
-        // If request fails, dispatch failed action
-      //  .catch(() => Observable.of({ type: 'LOGIN_FAILED' }));
-      //);
+  @Effect() logout$ = this.actions$
+    .ofType(UserActions.USER_LOG_OUT_ACTION)
+      // Navigate back to root
+      .switchMap( () => this.router.navigate(['/']));
 }

@@ -17,7 +17,6 @@ export class Auth {
   lock = new Auth0Lock(myConfig.clientID, myConfig.domain, {});
 
   constructor(private store: Store<AppState>, private userActions: UserActions) {
-    this.checkIfLocalStoreIsUpdated();
     this.lock.on("authenticated", (authResult) => {
       this.lock.getProfile(authResult.idToken, (error, profile) => {
         if (error) {
@@ -28,7 +27,8 @@ export class Auth {
         localStorage.setItem(this.PROFILE_STORAGE_ITEM, JSON.stringify(profile));
         this.checkIfLocalStoreIsUpdated();
       });
-  });
+    });
+    this.checkIfLocalStoreIsUpdated();
   }
 
   private checkIfLocalStoreIsUpdated() {
@@ -61,6 +61,7 @@ export class Auth {
     localStorage.removeItem(this.ID_TOKEN_STORAGE_ITEM);
     localStorage.removeItem(this.PROFILE_STORAGE_ITEM);
     this.store.dispatch(this.userActions.userLoggedOutAction());
+    this.store.dispatch(this.userActions.userLogOutAction());
     // @TODO log out user by redirecting them to logout page in auth0
     //window.location.href='http://' + myConfig.domain + '/v2/logout?returnTo=http%3A%2F%2Flocalhost%3A4020';
   };
