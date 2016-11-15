@@ -1,24 +1,52 @@
 import { Injectable } from '@angular/core';
+import { Store } from '@ngrx/store';
 import { tokenNotExpired } from 'angular2-jwt';
 import { myConfig } from './auth.config';
+import { UserActions } from '../actions/user-actions';
+import { AppState } from '../reducers';
 
 // Avoid name not found warnings
 declare var Auth0Lock: any;
 
 @Injectable()
 export class Auth {
+  ID_TOKEN_STORAGE_ITEM = 'id_token';
+  PROFILE_STORAGE_ITEM = 'profile';
+
   // Configure Auth0
   lock = new Auth0Lock(myConfig.clientID, myConfig.domain, {});
 
-  constructor() {
-    // Add callback for lock `authenticated` event
-    this.lock.on('authenticated', (authResult) => {
-      localStorage.setItem('id_token', authResult.idToken);
+  constructor(private store: Store<AppState>, private userActions: UserActions) {
+    this.lock.on("authenticated", (authResult) => {
+      this.lock.getProfile(authResult.idToken, (error, profile) => {
+        if (error) {
+          // @TODO Handle error
+          return;
+        }
+        localStorage.setItem(this.ID_TOKEN_STORAGE_ITEM, authResult.idToken);
+        localStorage.setItem(this.PROFILE_STORAGE_ITEM, JSON.stringify(profile));
+        this.checkIfLocalStoreIsUpdated();
+      });
     });
+    this.checkIfLocalStoreIsUpdated();
+  }
+
+  private checkIfLocalStoreIsUpdated() {
+    if(this.authenticated()) {
+      const authToken = localStorage.getItem(this.ID_TOKEN_STORAGE_ITEM);
+      const profile = JSON.parse(localStorage.getItem(this.PROFILE_STORAGE_ITEM));
+      const user = {
+        id: profile.user_id,
+        name: profile.name,
+        email: profile.email,
+        picture: profile.picture,
+        authToken: authToken
+      };
+      this.store.dispatch(this.userActions.userLoggedInAction(user));
+    }
   }
 
   public login() {
-    // Call the show method to display the widget.
     this.lock.show();
   };
 
@@ -30,6 +58,11 @@ export class Auth {
 
   public logout() {
     // Remove token from localStorage
-    localStorage.removeItem('id_token');
+    localStorage.removeItem(this.ID_TOKEN_STORAGE_ITEM);
+    localStorage.removeItem(this.PROFILE_STORAGE_ITEM);
+    this.store.dispatch(this.userActions.userLoggedOutAction());
+    this.store.dispatch(this.userActions.userLogOutAction());
+    // @TODO log out user by redirecting them to logout page in auth0
+    //window.location.href='http://' + myConfig.domain + '/v2/logout?returnTo=http%3A%2F%2Flocalhost%3A4020';
   };
 }

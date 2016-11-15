@@ -1,5 +1,10 @@
 import { Component } from '@angular/core';
+import { Store } from '@ngrx/store';
+import { Observable } from 'rxjs/Observable';
 import { Auth } from './service/auth.service';
+import { AppState } from './reducers';
+import { User } from './models/user-model';
+import { UserActions } from './actions/user-actions';
 
 @Component({
   selector: 'app-root',
@@ -7,5 +12,19 @@ import { Auth } from './service/auth.service';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  constructor(private auth: Auth) {}
+  private user;
+  constructor(
+    private store: Store<AppState>,
+    private userActions: UserActions,
+    private auth: Auth) {
+    store.select('user').subscribe(user => this.user = user);
+  }
+
+  private login() {
+    this.auth.login();
+  }
+
+  private logout() {
+    this.auth.logout();
+  }
 }

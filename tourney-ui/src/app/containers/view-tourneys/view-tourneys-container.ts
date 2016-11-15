@@ -1,7 +1,6 @@
-import { Component, OnInit, Inject } from '@angular/core';
+import { Component, OnInit} from '@angular/core';
 import { Router } from '@angular/router';
 
-import { Tourney } from '../../service/classes/tourney';
 import { TourneyService } from '../../service/tourney-service';
 
 @Component({
@@ -14,7 +13,10 @@ export class ViewTourneysContainer implements OnInit {
   ngOnInit(): void {
     this.tourneyService.getTourneys()
       .then(tourneys => this.tourneys = tourneys)
-      .catch(() => { console.log('error getting all tourneys'); return [] });
+      .catch(() => {
+        console.log('error getting all tourneys');
+        return [];
+      });
   }
 
   constructor(
