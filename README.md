@@ -2,9 +2,9 @@
 Tournament scheduling app for foosball.
 
 # UI
-project: tourney-ui
-stack: angular 2
+Project: tourney-ui.<br />
+Stack: angular 2.<br />
 
 # Server
-tourney-api
-stack: nodejs express, mongodb.
+Project: tourney-api.<br />
+Stack: nodejs express, mongodb.<br />
