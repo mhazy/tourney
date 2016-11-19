@@ -1,11 +1,10 @@
 # Tourney
 Tournament scheduling app for foosball.
 
-# Install
-npm install
+# UI
+project: tourney-ui
+stack: angular 2
 
-# Run API Server
-node ./src/server/server.js
-
-# Run Front End 
-npm start
+# Server
+tourney-api
+stack: nodejs express, mongodb.
