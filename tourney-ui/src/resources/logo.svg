@@ -33,8 +33,8 @@
  </g>
  <g>
   <title>Arm_Right</title>
-  <line id="arm_right_top" stroke="black" y2="15.75" x2="32" y1="15.75" x1="22.5" stroke-width="0.5"/>
+  <line id="arm_right_top" stroke="black" y2="15.75" x2="32" y1="15.75" x1="23" stroke-width="0.5"/>
   <line id="arm_right_middle" stroke="black" y2="19.75" x2="31.75" y1="15.5" x1="31.75" stroke-width="0.5"/>
-  <line id="arm_right_bottom" stroke="black" y2="19.75" x2="32" y1="19.75" x1="22.5" stroke-width="0.5"/>
+  <line id="arm_right_bottom" stroke="black" y2="19.75" x2="32" y1="19.75" x1="23" stroke-width="0.5"/>
  </g>
 </svg>
