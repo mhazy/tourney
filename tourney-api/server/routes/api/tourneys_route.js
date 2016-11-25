@@ -134,7 +134,6 @@ router.post('/', function(request, response) {
     newTrouney = JSON.parse(data);
     newTrouney.id = tourneys.length;
     tourneys.push(newTrouney);
-
   });
   request.on('end', function() {
     response.setHeader('Content-Type', 'application/json');

@@ -30,9 +30,10 @@ export class UserActions {
     };
   }
 
-  userLogInAction(): Action {
+  userLogInAction(user: User): Action {
     return {
       type: UserActions.USER_LOG_IN_ACTION,
+      payload: user
     };
   }
 

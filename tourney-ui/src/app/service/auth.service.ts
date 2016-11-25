@@ -36,13 +36,14 @@ export class Auth {
       const authToken = localStorage.getItem(this.ID_TOKEN_STORAGE_ITEM);
       const profile = JSON.parse(localStorage.getItem(this.PROFILE_STORAGE_ITEM));
       const user = {
-        id: profile.user_id,
+        _id: -1,
         name: profile.name,
         email: profile.email,
-        picture: profile.picture,
+        avatar: profile.picture,
+        profileId: profile.user_id,
         authToken: authToken
       };
-      this.store.dispatch(this.userActions.userLoggedInAction(user));
+      this.store.dispatch(this.userActions.userLogInAction(user));
     }
   }
 

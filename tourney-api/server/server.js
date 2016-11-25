@@ -1,19 +1,25 @@
 var express = require('express');
 var jwt = require('express-jwt');
+var tourneyDb = require('./data/tourney-db');
 var tourneysRouter = require('./routes/api/tourneys_route');
+//var loginRouter = require('./routes/api/login-route')(tourneyDb.users);
+var userRouter = require('./routes/api/user-route')(tourneyDb.users);
 
 var app = express();
 var SERVER_PORT = 8000;
 
 /*
- * No need to know what we use.
+ * Set up token decoding keys.
  */
-app.disabled('x-powered-by');
-
 var jwtCheck = jwt({
   secret: new Buffer(process.env.SECRET, 'base64'),
   audience: process.env.CLIENT_ID
 });
+
+/*
+ * No need to know what we use.
+ */
+app.disabled('x-powered-by');
 
 /*
  * Handle CORS
@@ -56,6 +62,16 @@ app.get('/', function(request, response) {
  * Serve api documentation page.
  */
 app.use('/api', express.static(__dirname + '/public/api.html'));
+
+/*
+ * Handle /api/login requests.
+ */
+//app.use('/api/login', loginRouter);
+
+/*
+ * Handle /api/user requestsion.
+ */
+app.use('/api/user', userRouter);
 
 /*
  * Handle tourneys api calls.
