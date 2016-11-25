@@ -6,9 +6,11 @@ import { UserActions } from '../actions/user-actions';
 export type UserState = User;
 
 const initState: UserState = {
-  id: -1,
+  _id: -1,
   name: '',
   email: '',
+  avatar: '',
+  profileId: '',
   authToken: ''
 };
 

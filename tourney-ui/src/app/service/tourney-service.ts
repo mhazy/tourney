@@ -12,31 +12,43 @@ import { User } from '../models/user-model';
 export class TourneyService {
   private tourneyAPIUrl = 'http://localhost:8000/api/tourneys/';
   private headers = new Headers();
-  private authToken = 'you-need-to-log-in';
   constructor(
     private http: Http,
     private router: Router,
     private route: ActivatedRoute,
     private store: Store<AppState>,
   ) {
-    store.select('user').subscribe((user: User) => { this.authToken = user.authToken? user.authToken : '' });
+    store.select('user').subscribe((user: User) => this.getHeader(user));
   }
 
-  private getHeader() {
-    const header = new Headers();
-    header.append('Authorization', 'Bearer ' + this.authToken);
-    header.append('Content-Type', 'application/json');
-    return header;
+  private getHeader(user: User) {
+    this.headers = new Headers();
+    this.headers.append('Authorization', 'Bearer ' + user.authToken);
+    this.headers.append('Content-Type', 'application/json');
+    return this.headers;
+  }
+
+  loginUser(user: User): Promise<User> {
+    const url = 'http://localhost:8000/api/user/';
+    return this.http
+    .post(url, JSON.stringify(user), { headers: this.getHeader(user) })
+    .toPromise()
+    .then((response)=>{
+      var responseMessage = response.json();
+      var returnedUser = JSON.parse(responseMessage.message);
+      returnedUser.authToken = user.authToken;
+      return returnedUser;
+    })
+    .catch(this.handleLoginUserError);
   }
 
   createTourney(tourney: Tourney): Promise<Tourney> {
     const url = `${this.tourneyAPIUrl}`;
     console.log('posting to ' + url);
     return this.http
-      .post(url, JSON.stringify(tourney), { headers: this.getHeader() })
+      .post(url, JSON.stringify(tourney), { headers: this.headers })
       .toPromise()
       .then(() => {
-
         console.log('created');
         return undefined;
       })
@@ -46,7 +58,7 @@ export class TourneyService {
   deleteTourney(tourney: Tourney): Promise<Tourney> {
     const url = `${this.tourneyAPIUrl}${tourney.id}`;
     return this.http
-      .delete(url, {headers: this.getHeader()})
+      .delete(url, { headers: this.headers })
       .toPromise()
       .then(() => {
         console.log('deleted'); return undefined;
@@ -57,7 +69,7 @@ export class TourneyService {
   updateTourney(tourney: Tourney): Promise<Tourney> {
     const url = `${this.tourneyAPIUrl}`;
     return this.http
-      .put(url, JSON.stringify(tourney), { headers: this.getHeader() })
+      .put(url, JSON.stringify(tourney), { headers: this.headers })
       .toPromise()
       .then(response => response.json())
       .catch(this.handleGetTourneyError);
@@ -66,7 +78,7 @@ export class TourneyService {
   getTourneys(): Promise<Tourney[]> {
     const url = `${this.tourneyAPIUrl}`;
     return this.http
-      .get(url, {headers: this.getHeader()})
+      .get(url, { headers: this.headers })
       .toPromise()
       .then(response => response.json())
       .catch(this.handleGetTourneysError);
@@ -75,7 +87,7 @@ export class TourneyService {
   getTourney(tourneyId: number): Promise<Tourney> {
     const url = `${this.tourneyAPIUrl}${tourneyId}`;
     return this.http
-      .get(url, {headers: this.getHeader()})
+      .get(url, { headers: this.headers })
       .toPromise()
       .then(response => response.json())
       .catch(this.handleGetTourneyError);
@@ -84,7 +96,7 @@ export class TourneyService {
   joinTourney(tourneyId: number, userId: number): Promise<ResponseMessage> {
     const url = `${this.tourneyAPIUrl}${tourneyId}/user/${userId}`;
     return this.http
-      .put(url, '{}', { headers: this.getHeader() })
+      .put(url, '{}', { headers: this.headers })
       .toPromise()
       .then(response => response.json())
       .catch(this.handleJoinTourneyError);
@@ -93,10 +105,15 @@ export class TourneyService {
   leaveTourney(tourneyId: number, userId: number): Promise<ResponseMessage> {
     const url = `${this.tourneyAPIUrl}${tourneyId}/user/${userId}`;
     return this.http
-      .delete(url, {headers: this.getHeader()})
+      .delete(url, { headers: this.headers })
       .toPromise()
       .then(response => response.json())
       .catch(this.handleLeaveTourneyError);
+  }
+
+  private handleLoginUserError(error: any): Promise<ResponseMessage> {
+    console.log('An error occured = ', JSON.stringify(error));
+    return Promise.resolve({ status: 'fail', message: JSON.stringify(error) });
   }
 
   private handleLeaveTourneyError(error: any): Promise<ResponseMessage> {
