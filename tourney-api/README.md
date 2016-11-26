@@ -4,6 +4,9 @@ Tournament scheduling app for foosball.
 # Install
 npm install
 
+# Run Mongo DB
+`./start-db.sh`
+
 # Run API Server
 #### 1 of 3 ways to run:
 
@@ -11,3 +14,6 @@ npm install
 2. run this in terminal `./start-api.sh <secret code> <client id>`
 3. modify start-api.sh file by placing `<secret code>` and `<client id>` values into corresponding variables.
   * then run this in terminal `./start-api.sh`
+
+# Requirements
+1. Mongo DB
