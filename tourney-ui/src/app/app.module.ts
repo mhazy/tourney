@@ -3,7 +3,7 @@ import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 
-import { Store, StoreModule } from '@ngrx/store';
+import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
 
 import { UserEffects } from './effects/user-effects';
@@ -12,7 +12,7 @@ import { UserActions } from './actions/user-actions';
 import reducer from './reducers';
 
 import { AUTH_PROVIDERS } from 'angular2-jwt';
-import { Auth } from './service/auth.service';
+import { Auth } from './service/auth-service';
 
 import { AppComponent } from './app.component';
 import { routing } from './app.routing';

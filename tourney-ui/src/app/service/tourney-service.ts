@@ -33,9 +33,9 @@ export class TourneyService {
     return this.http
     .post(url, JSON.stringify(user), { headers: this.getHeader(user) })
     .toPromise()
-    .then((response)=>{
-      var responseMessage = response.json();
-      var returnedUser = JSON.parse(responseMessage.message);
+    .then((response) => {
+      const responseMessage = response.json();
+      const returnedUser = JSON.parse(responseMessage.message);
       returnedUser.authToken = user.authToken;
       return returnedUser;
     })

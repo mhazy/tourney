@@ -1,9 +1,7 @@
 import { Component } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { Observable } from 'rxjs/Observable';
-import { Auth } from './service/auth.service';
+import { Auth } from './service/auth-service';
 import { AppState } from './reducers';
-import { User } from './models/user-model';
 import { UserActions } from './actions/user-actions';
 
 @Component({

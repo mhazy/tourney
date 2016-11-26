@@ -3,13 +3,13 @@ const ObjectId = mongoose.Types.ObjectId;
 
 module.exports = function(userModel) {
   const getNewId = function() {
-    return new ObjectId;
+    return new ObjectId();
   };
 
   const findUser = function(query) {
     const user = userModel.findOne(query);
     return user.exec();
-  }
+  };
 
   const createUser = function(user) {
     const newUser = new userModel(user);

@@ -9,7 +9,7 @@ module.exports =  function(){
     return {
       'status': status,
       'message': message
-    }
+    };
   };
 
   const sendResponseMessage = function(response, responseMessage){

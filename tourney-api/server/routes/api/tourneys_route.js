@@ -47,7 +47,7 @@ router.put('/', function(request, response) {
     }
     updatedTourney = JSON.parse(data);
     tourneys = tourneys.map(tourney => {
-      if (tourney.id == updatedTourney.id) {
+      if (tourney.id === updatedTourney.id) {
         return updatedTourney;
       } else {
         return tourney;
