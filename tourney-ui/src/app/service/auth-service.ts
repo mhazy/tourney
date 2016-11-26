@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { tokenNotExpired } from 'angular2-jwt';
-import { myConfig } from './auth.config';
+import { myConfig } from './auth-config';
 import { UserActions } from '../actions/user-actions';
 import { AppState } from '../reducers';
 
@@ -17,7 +17,7 @@ export class Auth {
   lock = new Auth0Lock(myConfig.clientID, myConfig.domain, {});
 
   constructor(private store: Store<AppState>, private userActions: UserActions) {
-    this.lock.on("authenticated", (authResult) => {
+    this.lock.on('authenticated', (authResult) => {
       this.lock.getProfile(authResult.idToken, (error, profile) => {
         if (error) {
           // @TODO Handle error
@@ -32,7 +32,7 @@ export class Auth {
   }
 
   private checkIfLocalStoreIsUpdated() {
-    if(this.authenticated()) {
+    if (this.authenticated()) {
       const authToken = localStorage.getItem(this.ID_TOKEN_STORAGE_ITEM);
       const profile = JSON.parse(localStorage.getItem(this.PROFILE_STORAGE_ITEM));
       const user = {
@@ -64,6 +64,6 @@ export class Auth {
     this.store.dispatch(this.userActions.userLoggedOutAction());
     this.store.dispatch(this.userActions.userLogOutAction());
     // @TODO log out user by redirecting them to logout page in auth0
-    //window.location.href='http://' + myConfig.domain + '/v2/logout?returnTo=http%3A%2F%2Flocalhost%3A4020';
+    // window.location.href='http://' + myConfig.domain + '/v2/logout?returnTo=http%3A%2F%2Flocalhost%3A4020';
   };
 }

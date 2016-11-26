@@ -25,12 +25,12 @@ app.disabled('x-powered-by');
  * Handle CORS
  */
 app.use(function(request, response, next) {
-  response.setHeader("Access-Control-Allow-Origin", "*");
-  response.setHeader("Access-Control-Allow-Headers", "X-Requested-With, X-HTTP-Method-Override, Content-Type, Accept, Authorization");
-  response.setHeader("Access-Control-Max-Age", '86400'); // 24 hours
+  response.setHeader('Access-Control-Allow-Origin', '*');
+  response.setHeader('Access-Control-Allow-Headers', 'X-Requested-With, X-HTTP-Method-Override, Content-Type, Accept, Authorization');
+  response.setHeader('Access-Control-Max-Age', '86400'); // 24 hours
   if (request.method === 'OPTIONS') {
-    response.setHeader("Access-Control-Allow-Methods", "POST, GET, PUT, DELETE, OPTIONS");
-    response.setHeader("Access-Control-Allow-Credentials", false);
+    response.setHeader('Access-Control-Allow-Methods', 'POST, GET, PUT, DELETE, OPTIONS');
+    response.setHeader('Access-Control-Allow-Credentials', false);
     response.sendStatus(200);
     response.end();
     return;
