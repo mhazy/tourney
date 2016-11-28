@@ -12,31 +12,44 @@ import { TourneyService } from '../../service/tourney-service';
   templateUrl: './create-tourney-container.html',
 })
 export class CreateTourneyContainer implements OnInit {
-  newTourney: Tourney;
+  newTourney: Tourney = { 
+     _id: -1,
+     name: '',
+     description: '',
+     rules: '',
+     registration: {
+       start: new Date(),
+       end: null
+     },
+     duration: {
+       start: new Date(),
+       end: null
+     },
+     participants: {
+       min: 2,
+       max: 2
+     },
+     playoffs: 0,
+     schedule: 0,
+   };
   isEdit: boolean = false;
   createTourneyForm: FormGroup;
   formBuilder: FormBuilder;
 
   ngOnInit(): void {
     this.route.params.forEach((params: Params) => {
-      let id = +params['id']; // + converts the value to a number
+      let id = params['id'];
       if (!id && id !== 0) {
         return;
       }
       this.isEdit = true;
       this.tourneyService.getTourney(id)
-        .then(
-        tourney => {
-          console.log('go tourney = ' + JSON.stringify(tourney));
+        .then((tourney) => {
           this.newTourney = tourney; this.initForm();
-        }
-        )
-        .catch(
-        () => {
-          console.log('error getting all tourney');
-          return {};
-        }
-        );
+        })
+        .catch((error) => {
+          console.log('error getting tourney');
+        });
     });
   }
 
@@ -60,64 +73,64 @@ export class CreateTourneyContainer implements OnInit {
         ]
       ],
       description: [
-        this.newTourney.description || '',
+        (this.newTourney && this.newTourney.description) || '',
         [
           Validators.maxLength(255)
         ]
       ],
       rules: [
-        this.newTourney.rules || '',
+        (this.newTourney && this.newTourney.rules) || '',
         [
         ]
       ],
       registration: this.formBuilder.group({
         start: [
-          this.newTourney.registration.start || this.getCurrentDate(),
+          (this.newTourney && this.newTourney.registration.start) || this.getCurrentDate(),
           [
             Validators.required
           ]
         ],
         end: [
-          this.newTourney.registration.end || '',
+          (this.newTourney && this.newTourney.registration.end) || '',
           [
           ]
         ]
       }),
       duration: this.formBuilder.group({
         start: [
-          this.newTourney.duration.start || this.getCurrentDate(),
+          (this.newTourney && this.newTourney.duration.start) || this.getCurrentDate(),
           [
             Validators.required
           ]
         ],
         end: [
-          this.newTourney.duration.end || '',
+          (this.newTourney && this.newTourney.duration.end) || '',
           [
           ]
         ]
       }),
       participants: this.formBuilder.group({
         min: [
-          this.newTourney.participants.min || 2,
+          2,
           [
             Validators.required,
             this.validateInteger(2)
           ]
         ],
         max: [
-          this.newTourney.participants.max || 2,
+          (this.newTourney && this.newTourney.participants.max) || 2,
           [
             this.validateInteger(2)
           ]
         ]
       }),
       schedule: [
-        this.newTourney.schedule || 'roundrobin',
+        (this.newTourney && this.newTourney.schedule) || 'roundrobin',
         [
         ]
       ],
       playoffs: [
-        this.newTourney.playoffs || 'none',
+        (this.newTourney && this.newTourney.playoffs) || 'none',
         [
         ]
       ]
@@ -153,7 +166,7 @@ export class CreateTourneyContainer implements OnInit {
 
   onSubmit(): void {
     this.newTourney = {
-      id: this.newTourney.id,
+      _id: this.newTourney && this.newTourney._id || -1,
       name: this.createTourneyForm.value.name,
       description: this.createTourneyForm.value.description,
       rules: this.createTourneyForm.value.rules,
@@ -183,12 +196,13 @@ export class CreateTourneyContainer implements OnInit {
       this.tourneyService
         .updateTourney(newTourney)
         .then(tourney => console.log('updated tourney'))
+        .then(() => {
+          alert('updated');
+        })
         .then(
-        () => alert('updated')
-        )
-        .then(
-        () => this.router.navigate(['/tourney/' + this.newTourney.id])
-        );
+         () => {
+           this.router.navigate(['/tourney/' + this.newTourney._id]);
+         });
     } else {
       this.tourneyService
         .createTourney(newTourney)

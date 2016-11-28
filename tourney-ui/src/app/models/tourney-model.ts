@@ -2,7 +2,7 @@ import { PlayoffsEnum } from './playoffs-enum';
 import { ScheduleEnum } from './schedule-enum';
 
 export interface Tourney {
-  id: number;
+  _id: any;
   name: string;
   description: string;
   rules: string;
@@ -20,4 +20,6 @@ export interface Tourney {
   };
   playoffs: PlayoffsEnum;
   schedule: ScheduleEnum;
+  owner?: any;
+  players?: Array<string>;
 };

@@ -30,11 +30,12 @@ export class ViewTourneyContainer implements OnInit {
   private getTourney(): void {
     this.route.params.forEach(
       (params: Params) => {
-        let id = +params['id']; // + converts the value to a number
+        let id = params['id'];
         this.tourneyService.getTourney(id)
           .then(
           tourney => {
-            console.log('go tourney = ' + JSON.stringify(tourney));
+            console.log('got tourney = ' + JSON.stringify(tourney));
+            console.log('foo = ' + tourney.registration.start);
             this.tourney = tourney;
             // @TODO sanatise the rules before they get marked?
             // this.tourney.rules = this.md.parse(this.tourney.rules);
@@ -49,15 +50,15 @@ export class ViewTourneyContainer implements OnInit {
   }
 
   onJoin(): void {
-    this.tourneyService.joinTourney(this.tourney.id, this.user.id).then(reponse => { alert(reponse.message); this.getTourney(); });
+    this.tourneyService.joinTourney(this.tourney._id, this.user.id).then(reponse => { alert(reponse.message); this.getTourney(); });
   }
 
   onLeave(): void {
-    this.tourneyService.leaveTourney(this.tourney.id, this.user.id).then(reponse => { alert(reponse.message); this.getTourney(); });
+    this.tourneyService.leaveTourney(this.tourney._id, this.user.id).then(reponse => { alert(reponse.message); this.getTourney(); });
   }
 
   onDelete(): void {
-    this.tourneyService.deleteTourney(this.tourney).then(() => this.goBack());
+    this.tourneyService.deleteTourney(this.tourney._id).then(() => this.goBack());
   }
 
   goBack(): void {
