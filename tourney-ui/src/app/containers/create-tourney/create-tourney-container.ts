@@ -12,26 +12,7 @@ import { TourneyService } from '../../service/tourney-service';
   templateUrl: './create-tourney-container.html',
 })
 export class CreateTourneyContainer implements OnInit {
-  newTourney: Tourney = { 
-     _id: -1,
-     name: '',
-     description: '',
-     rules: '',
-     registration: {
-       start: new Date(),
-       end: null
-     },
-     duration: {
-       start: new Date(),
-       end: null
-     },
-     participants: {
-       min: 2,
-       max: 2
-     },
-     playoffs: 0,
-     schedule: 0,
-   };
+  newTourney: Tourney;
   isEdit: boolean = false;
   createTourneyForm: FormGroup;
   formBuilder: FormBuilder;
@@ -66,9 +47,9 @@ export class CreateTourneyContainer implements OnInit {
   private initForm() {
     this.createTourneyForm = this.formBuilder.group({
       name: [
-        this.newTourney.name || '',
+        (this.newTourney && this.newTourney.name) || '',
         [
-          Validators.pattern('^(?!.*[ ]{2})[A-Z0-9]([a-zA-Z0-9 ]{0,254})[^\W]$'),
+          Validators.pattern('^(?=.{2,255}$)[A-Za-z0-9]*( ?[A-Za-z0-9\-])*$'),
           Validators.required
         ]
       ],
@@ -85,26 +66,26 @@ export class CreateTourneyContainer implements OnInit {
       ],
       registration: this.formBuilder.group({
         start: [
-          (this.newTourney && this.newTourney.registration.start) || this.getCurrentDate(),
+          (this.newTourney && this.formatDateToString(this.newTourney.registration.start)) || this.formatDateToString(),
           [
             Validators.required
           ]
         ],
         end: [
-          (this.newTourney && this.newTourney.registration.end) || '',
+          (this.newTourney && this.formatDateToString(this.newTourney.registration.end)) || '',
           [
           ]
         ]
       }),
       duration: this.formBuilder.group({
         start: [
-          (this.newTourney && this.newTourney.duration.start) || this.getCurrentDate(),
+          (this.newTourney && this.formatDateToString(this.newTourney.duration.start)) || this.formatDateToString(),
           [
             Validators.required
           ]
         ],
         end: [
-          (this.newTourney && this.newTourney.duration.end) || '',
+          (this.newTourney && this.formatDateToString(this.newTourney.duration.end)) || '',
           [
           ]
         ]
@@ -151,7 +132,7 @@ export class CreateTourneyContainer implements OnInit {
     };
   }
 
-  private getCurrentDate(): string {
+  private formatDateToString(date: Date = new Date()): string {
     const currentDate = new Date();
     const currentMonth = currentDate.getMonth() + 1;
     const currentDay = currentDate.getUTCDate();
