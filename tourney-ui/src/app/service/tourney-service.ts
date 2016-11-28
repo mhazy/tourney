@@ -12,13 +12,14 @@ import { User } from '../models/user-model';
 export class TourneyService {
   private tourneyAPIUrl = 'http://localhost:8000/api/tourneys/';
   private headers = new Headers();
+  private user: User;
   constructor(
     private http: Http,
     private router: Router,
     private route: ActivatedRoute,
     private store: Store<AppState>,
   ) {
-    store.select('user').subscribe((user: User) => this.getHeader(user));
+    store.select('user').subscribe((user: User) => { this.user = user; this.getHeader(user) });
   }
 
   private getHeader(user: User) {
@@ -45,23 +46,23 @@ export class TourneyService {
   createTourney(tourney: Tourney): Promise<Tourney> {
     const url = `${this.tourneyAPIUrl}`;
     console.log('posting to ' + url);
+    tourney.owner = this.user._id;
     return this.http
       .post(url, JSON.stringify(tourney), { headers: this.headers })
       .toPromise()
       .then(() => {
-        console.log('created');
         return undefined;
       })
       .catch(this.handleCreateTourneyError);
   }
 
-  deleteTourney(tourney: Tourney): Promise<Tourney> {
-    const url = `${this.tourneyAPIUrl}${tourney.id}`;
+  deleteTourney(tourneyId: string): Promise<Tourney> {
+    const url = `${this.tourneyAPIUrl}${tourneyId}`;
     return this.http
       .delete(url, { headers: this.headers })
       .toPromise()
       .then(() => {
-        console.log('deleted'); return undefined;
+        return undefined;
       })
       .catch(this.handleDeleteTourneyError);
   }
@@ -80,16 +81,16 @@ export class TourneyService {
     return this.http
       .get(url, { headers: this.headers })
       .toPromise()
-      .then(response => response.json())
+      .then(response => JSON.parse(response.json().message))
       .catch(this.handleGetTourneysError);
   }
 
-  getTourney(tourneyId: number): Promise<Tourney> {
+  getTourney(tourneyId: string): Promise<Tourney> {
     const url = `${this.tourneyAPIUrl}${tourneyId}`;
     return this.http
       .get(url, { headers: this.headers })
       .toPromise()
-      .then(response => response.json())
+      .then(response => JSON.parse(response.json().message))
       .catch(this.handleGetTourneyError);
   }
 

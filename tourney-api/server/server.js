@@ -1,7 +1,7 @@
 var express = require('express');
 var jwt = require('express-jwt');
 var tourneyDb = require('./data/tourney-db');
-var tourneysRouter = require('./routes/api/tourneys_route');
+var tourneysRouter = require('./routes/api/tourneys_route')(tourneyDb.tourneys);
 //var loginRouter = require('./routes/api/login-route')(tourneyDb.users);
 var userRouter = require('./routes/api/user-route')(tourneyDb.users);
 

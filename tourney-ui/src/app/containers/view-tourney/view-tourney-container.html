@@ -3,7 +3,7 @@
     This tourney is no longer available.
   </div>
   <div *ngIf="tourney">
-    <a routerLink="/edittourney/{{tourney.id}}">Edit</a>
+    <a routerLink="/edittourney/{{tourney._id}}">Edit</a>
     <button (click)="onDelete()">Delete</button>
     <button (click)="onJoin()">Join</button>
     <button (click)="onLeave()">Leave</button>
