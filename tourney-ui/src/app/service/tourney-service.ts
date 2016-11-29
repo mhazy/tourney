@@ -94,7 +94,7 @@ export class TourneyService {
       .catch(this.handleGetTourneyError);
   }
 
-  joinTourney(tourneyId: number, userId: number): Promise<ResponseMessage> {
+  joinTourney(tourneyId: string, userId: string): Promise<ResponseMessage> {
     const url = `${this.tourneyAPIUrl}${tourneyId}/user/${userId}`;
     return this.http
       .put(url, '{}', { headers: this.headers })
@@ -103,7 +103,7 @@ export class TourneyService {
       .catch(this.handleJoinTourneyError);
   }
 
-  leaveTourney(tourneyId: number, userId: number): Promise<ResponseMessage> {
+  leaveTourney(tourneyId: string, userId: string): Promise<ResponseMessage> {
     const url = `${this.tourneyAPIUrl}${tourneyId}/user/${userId}`;
     return this.http
       .delete(url, { headers: this.headers })

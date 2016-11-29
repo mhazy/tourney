@@ -1,8 +1,8 @@
 module.exports =  function(){
   const ResponseStatus = {
-    SUCCESS: 'success',
-    FAIL: 'fail',
-    WARNING: 'warning'
+    SUCCESS: 0,
+    FAIL: 1,
+    WARNING: 2
   };
 
   const generateResponse = function(status, message) {

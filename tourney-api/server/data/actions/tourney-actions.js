@@ -22,7 +22,6 @@ module.exports = function(tourneyModel) {
   };
 
   const getTourney = function(tourneyId) {
-    console.log('trying to get tourney with id ' + tourneyId);
     const tourney = tourneyModel.findOne({ '_id': ObjectId(tourneyId) });
     return tourney.exec();
   };
@@ -37,6 +36,27 @@ module.exports = function(tourneyModel) {
     return updatedTourney.exec();
   };
 
+  const joinTourney = function(tourneyId, userId) {
+    const condition = { _id: tourneyId };
+    const update = { $addToSet: { players: userId }};
+    const joinedTourney = tourneyModel.findOneAndUpdate(condition, update, { 'new': true });
+    return joinedTourney.exec();
+  };
+
+  const leaveTourney = function(tourneyId, userId) {
+    const condition = { _id: tourneyId };
+    const update = { $pull: { players: userId } };
+    const options = { 'new': true };
+    const leftTourney = tourneyModel.findOneAndUpdate(condition, update, options);
+    return leftTourney.exec();
+  }
+
+  const isTourneyNotFull = function(tourneyId) {
+    const condition = { _id: tourneyId, $where : 'this.players.length < this.participants.max' };
+    fullTourney = tourneyModel.findOne(condition);
+    return fullTourney.exec();
+  }
+
   return {
     getAllTourneys,
     createTourney,
@@ -45,5 +65,8 @@ module.exports = function(tourneyModel) {
     deleteTourney,
     updateTourney,
     getNewId,
+    joinTourney,
+    leaveTourney,
+    isTourneyNotFull,
   };
 };
