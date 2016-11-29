@@ -15,9 +15,9 @@ npm install
 3. modify start-api.sh file by placing `<secret code>` and `<client id>` values into corresponding variables.
   * then run this in terminal `./start-api.sh`
 
-**** Note: 
+#### Note: 
 If you update `start-api.sh` then make sure you don't commit it.
 To do so run `git update-index --assume-unchanged start-api.sh` to make it as unchanged file.
-
+To start tracking the file again run `git update-index --no-assume-unchanged start-api.sh`.
 # Requirements
 1. Mongo DB
