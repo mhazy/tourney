@@ -33,7 +33,8 @@ module.exports = function(tourneyModel) {
   };
 
   const updateTourney = function(tourneyId, newData) {
-    // @TODO
+    const updatedTourney = tourneyModel.findOneAndUpdate({ _id: tourneyId }, newData, { 'new': true });
+    return updatedTourney.exec();
   };
 
   return {

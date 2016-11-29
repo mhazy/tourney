@@ -71,38 +71,33 @@ module.exports = function(tourneys) {
     });
   });
 
+  /*
+   * Update an existing tourney with given information.
+   * @TODO: should it be /:id ?
+   */
+  router.put('/', function(request, response) {
+    request.on('data', function(data, error) {
+      const updatedTourney = JSON.parse(data);
+      if (error) {
+        ResponseMessage.respondWithFail(response, error);
+      }else {
+        tourneys.updateTourney(updatedTourney._id, updatedTourney)
+        .then((tourney) => {
+          if(tourney) {
+            ResponseMessage.respondWithSuccess(response, tourney);
+          }else {
+            ResponseMessage.respondWithFail(response, 'Failed to find and update specified tournament.');
+          }
+        })
+        .catch((error) => {
+          ResponseMessage.respondWithFail(response, error);
+        });
+      }
+    });
+  });
+
   return router;
 };
-
-// /*
-//  * Update an existing tourney with given information.
-//  * @TODO: should it be /:id ?
-//  */
-// router.put('/', function(request, response) {
-//   var updatedTourney = {};
-
-//   request.on('data', function(data, error) {
-//     if (error) {
-//       response.writeHeader(500, { 'Content-Type': 'text/plain' });
-//       response.write('Error reading data stream: ' + JSON.stringify(error));
-//       response.end();
-//       return;
-//     }
-//     updatedTourney = JSON.parse(data);
-//     tourneys = tourneys.map(tourney => {
-//       if (tourney.id === updatedTourney.id) {
-//         return updatedTourney;
-//       } else {
-//         return tourney;
-//       }
-//     });
-//   });
-//   request.on('end', function() {
-//     response.setHeader('Content-Type', 'application/json');
-//     response.write(JSON.stringify(updatedTourney));
-//     response.end();
-//   });
-// });
 
 // /*
 //  * Add player to tournament.

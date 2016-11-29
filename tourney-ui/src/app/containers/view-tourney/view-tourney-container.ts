@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Params } from '@angular/router';
+import { ActivatedRoute, Params, Router } from '@angular/router';
 import { Location } from '@angular/common';
 
 import { Tourney } from '../../models/tourney-model';
@@ -16,7 +16,7 @@ export class ViewTourneyContainer implements OnInit {
     name: 'John Doe',
     email: 'john.doe@foo.bar'
   }; // MOCK USER @TODO add user service
-
+  private dateFormat = "dd MMMM, yyyy";
   ngOnInit(): void {
     this.getTourney();
   }
@@ -24,6 +24,7 @@ export class ViewTourneyContainer implements OnInit {
   constructor(
     private tourneyService: TourneyService,
     private route: ActivatedRoute,
+    private router: Router,
     private location: Location
   ) { }
 
@@ -34,8 +35,6 @@ export class ViewTourneyContainer implements OnInit {
         this.tourneyService.getTourney(id)
           .then(
           tourney => {
-            console.log('got tourney = ' + JSON.stringify(tourney));
-            console.log('foo = ' + tourney.registration.start);
             this.tourney = tourney;
             // @TODO sanatise the rules before they get marked?
             // this.tourney.rules = this.md.parse(this.tourney.rules);
@@ -50,15 +49,29 @@ export class ViewTourneyContainer implements OnInit {
   }
 
   onJoin(): void {
-    this.tourneyService.joinTourney(this.tourney._id, this.user.id).then(reponse => { alert(reponse.message); this.getTourney(); });
+    this.tourneyService
+    .joinTourney(this.tourney._id, this.user.id)
+    .then((reponse) => {
+      alert(reponse.message);
+      this.getTourney();
+    });
   }
 
   onLeave(): void {
-    this.tourneyService.leaveTourney(this.tourney._id, this.user.id).then(reponse => { alert(reponse.message); this.getTourney(); });
+    this.tourneyService
+    .leaveTourney(this.tourney._id, this.user.id)
+    .then(reponse => {
+      alert(reponse.message);
+      this.getTourney();
+    });
   }
 
   onDelete(): void {
-    this.tourneyService.deleteTourney(this.tourney._id).then(() => this.goBack());
+    this.tourneyService
+    .deleteTourney(this.tourney._id)
+    .then(() => {
+      this.router.navigate(['/viewtourneys/']);
+    });
   }
 
   goBack(): void {

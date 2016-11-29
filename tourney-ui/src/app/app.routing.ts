@@ -23,7 +23,7 @@ const appRoutes: Routes = [
     component: ViewTourneysContainer,
   },
   {
-    path: 'tourney/:id',
+    path: 'viewtourney/:id',
     component: ViewTourneyContainer,
   }
 ];

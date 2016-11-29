@@ -6,7 +6,7 @@
   </div>
   <ol *ngIf="tourneys.length > 0" style="display: inline-block;">
     <li *ngFor='let tourney of tourneys'>
-      <a routerLink="/tourney/{{tourney._id}}">{{tourney.name}}</a>
+      <a routerLink="/viewtourney/{{tourney._id}}">{{tourney.name}}</a>
     </li>
   </ol>
 </div>

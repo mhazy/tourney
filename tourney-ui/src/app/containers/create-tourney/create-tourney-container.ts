@@ -166,29 +166,22 @@ export class CreateTourneyContainer implements OnInit {
       schedule: this.createTourneyForm.value.schedule,
       playoffs: this.createTourneyForm.value.playoffs,
     };
-    console.log('form submitted:');
-    console.log(JSON.stringify(this.newTourney));
     this.createTourney(this.newTourney);
-
   }
 
   createTourney(newTourney: Tourney): void {
     if (this.isEdit) {
       this.tourneyService
         .updateTourney(newTourney)
-        .then(tourney => console.log('updated tourney'))
         .then(() => {
-          alert('updated');
-        })
-        .then(
-         () => {
-           this.router.navigate(['/tourney/' + this.newTourney._id]);
+           this.router.navigate(['/viewtourney/' + this.newTourney._id]);
          });
     } else {
       this.tourneyService
         .createTourney(newTourney)
-        .then(tourney => console.log('created new tourney'))
-        .then(() => this.goBack());
+        .then((tourney) => {
+          this.router.navigate(['/viewtourney/' + tourney._id]);
+        });
     }
   }
 

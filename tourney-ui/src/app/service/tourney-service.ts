@@ -50,8 +50,8 @@ export class TourneyService {
     return this.http
       .post(url, JSON.stringify(tourney), { headers: this.headers })
       .toPromise()
-      .then(() => {
-        return undefined;
+      .then((response) => {
+        return JSON.parse(response.json().message);
       })
       .catch(this.handleCreateTourneyError);
   }
@@ -72,7 +72,7 @@ export class TourneyService {
     return this.http
       .put(url, JSON.stringify(tourney), { headers: this.headers })
       .toPromise()
-      .then(response => response.json())
+      .then(response => JSON.parse(response.json().message))
       .catch(this.handleGetTourneyError);
   }
 

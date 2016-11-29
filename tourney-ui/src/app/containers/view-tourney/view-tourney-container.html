@@ -11,13 +11,13 @@
     <p>{{tourney.description}}</p>
     <div>
       <h3>Registration</h3>
-      <span>From: {{tourney.registration.start}}</span>
-      <span *ngIf="tourney.registration.end">To: {{tourney.registration.end}}</span>
+      <span>From: {{ tourney.registration.start | date:dateFormat }}</span>
+      <span *ngIf="tourney.registration.end">To: {{ tourney.registration.end | date:dateFormat }}</span>
     </div>
     <div>
       <h3>Duration</h3>
-      <span>From: </span>{{tourney.duration.start}}
-      <span *ngIf="tourney.duration.end">To: </span>{{tourney.duration.end}}
+      <span>From: {{ tourney.duration.start | date:dateFormat }}</span>
+      <span *ngIf="tourney.duration.end">To: {{ tourney.duration.end | date:dateFormat }}</span>
     </div>
     <div>
       <h3>Players</h3>
