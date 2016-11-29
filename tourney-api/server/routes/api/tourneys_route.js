@@ -73,7 +73,6 @@ module.exports = function(tourneys) {
 
   /*
    * Update an existing tourney with given information.
-   * @TODO: should it be /:id ?
    */
   router.put('/', function(request, response) {
     request.on('data', function(data, error) {
@@ -96,67 +95,58 @@ module.exports = function(tourneys) {
     });
   });
 
+  /*
+   * Add player to tournament.
+   */
+  router.put('/:tourneyId/user/:userId', function(request, response) {
+    var tourneyId = request.params.tourneyId;
+    var userId = request.params.userId;
+    tourneys.isTourneyNotFull(tourneyId)
+    .then((tourney) => {
+      if(tourney) {
+        _joinTourney(tourneyId, userId, response);
+      }else{
+        ResponseMessage.respondWithFail(response, 'Tournament is full.');
+      }
+    })
+    .catch((error) => {
+      ResponseMessage.respondWithFail(response, error);
+    });
+  });
+
+  /*
+   * Private helper function.
+   */
+  function _joinTourney(tourneyId, userId, response) {
+    tourneys
+    .joinTourney(tourneyId, userId)
+    .then((tourney) => {
+      if(tourney) {
+        ResponseMessage.respondWithSuccess(response, tourney);
+      }else {
+        ResponseMessage.respondWithFail(response, 'Failed to join specified tournament.');
+      }
+    });
+  }
+
+  /*
+   * Remove player from tournament.
+   */
+  router.delete('/:tourneyId/user/:userId', function(request, response) {
+    var tourneyId = request.params.tourneyId;
+    var userId = request.params.userId;
+    tourneys.leaveTourney(tourneyId, userId)
+    .then((tourney) => {
+      if(tourney) {
+        ResponseMessage.respondWithSuccess(response, tourney);
+      }else {
+        ResponseMessage.respondWithFail(response, 'Failed to leave tournament.');
+      }
+    })
+    .catch((error) => {
+      ResponseMessage.respondWithFail(response, error);
+    });
+  });
+
   return router;
 };
-
-// /*
-//  * Add player to tournament.
-//  */
-// router.put('/:tourneyId/user/:userId', function(request, response) {
-//   var updatedTourney;
-//   var tourneyId = +request.params.tourneyId;
-//   var userId = +request.params.userId;
-//   var responseMessage = {};
-//   var currentPlayers;
-//   updatedTourney = tourneys.find(tourney => tourney.id === tourneyId);
-//   if (updatedTourney) {
-//     currentPlayers = updatedTourney.players ? updatedTourney.players : [];
-//     if (currentPlayers.length === updatedTourney.participants.max) {
-//       responseMessage.status = 'fail';
-//       responseMessage.message = 'Tournament is full.';
-//     } else if (!currentPlayers.includes(userId)) {
-//       currentPlayers.push(userId);
-//       updatedTourney.players = currentPlayers;
-//       updatedTourney.participants.current = currentPlayers.length;
-//       responseMessage.status = 'success';
-//       responseMessage.message = 'Player successfully added to the tournament.';
-//     } else {
-//       responseMessage.status = 'warning';
-//       responseMessage.message = 'This player is already in the tournament.';
-//     }
-//   }
-//   response.setHeader('Content-Type', 'application/json');
-//   response.send(JSON.stringify(responseMessage));
-// });
-
-// /*
-//  * Remove player from tournament.
-//  */
-// router.delete('/:tourneyId/user/:userId', function(request, response) {
-//   var tourneyId = +request.params.tourneyId;
-//   var userId = +request.params.userId;
-//   var responseMessage = {};
-//   responseMessage.status = 'fail';
-//   responseMessage.message = 'Cannot find required tournament.';
-//   tourneys = tourneys.map(
-//     tourney => {
-//       if (tourney.id === tourneyId) {
-//         responseMessage.status = 'warning';
-//         responseMessage.message = 'This tournament has no players to remove.';
-//         if (tourney.players) {
-//           tourney.players = tourney.players.filter(player => player !== userId);
-//           tourney.participants.current = tourney.players.length;
-//           responseMessage.status = 'success';
-//           responseMessage.message = 'Player was removed from the tournament.';
-//         }
-//       }
-//       return tourney;
-//     }
-//   );
-//   response.setHeader('Content-Type', 'application/json');
-//   response.send(JSON.stringify(responseMessage));
-// });
-
-
-
-// module.exports = router;
