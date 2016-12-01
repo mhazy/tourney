@@ -7,8 +7,9 @@ import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
 
 import { UserEffects } from './effects/user-effects';
+import { TourneyEffects } from './effects/tourney-effects';
 
-import { UserActions } from './actions/user-actions';
+import { TourneyAppActions } from './actions/tourney-app-actions';
 import reducer from './reducers';
 
 import { AUTH_PROVIDERS } from 'angular2-jwt';
@@ -21,7 +22,11 @@ import { WelcomePageContainer } from './containers/welcome-page/welcome-page-con
 import { CreateTourneyContainer } from './containers/create-tourney/create-tourney-container';
 import { ViewTourneysContainer } from './containers/view-tourneys/view-tourneys-container';
 import { ViewTourneyContainer } from './containers/view-tourney/view-tourney-container';
+import { ViewAllTourneysContainer } from './containers/view-all-tourneys/view-all-tourneys-container';
+import { ViewMyTourneysContainer } from './containers/view-my-tourneys/view-my-tourneys-container';
+
 import { TourneyService } from './service/tourney-service';
+import { TourneyListComponent } from './components/tourney-list/tourney-list-component';
 
 @NgModule({
   imports: [
@@ -32,6 +37,7 @@ import { TourneyService } from './service/tourney-service';
     routing,
     StoreModule.provideStore(reducer),
     EffectsModule.run(UserEffects),
+    EffectsModule.run(TourneyEffects),
   ],
   declarations: [
     AppComponent,
@@ -39,9 +45,12 @@ import { TourneyService } from './service/tourney-service';
     CreateTourneyContainer,
     ViewTourneysContainer,
     ViewTourneyContainer,
+    ViewAllTourneysContainer,
+    ViewMyTourneysContainer,
+    TourneyListComponent,
   ],
   providers: [
-    UserActions,
+    TourneyAppActions,
     TourneyService,
     Auth,
     AUTH_PROVIDERS

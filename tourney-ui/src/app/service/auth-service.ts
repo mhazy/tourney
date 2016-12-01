@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { tokenNotExpired } from 'angular2-jwt';
 import { myConfig } from './auth-config';
-import { UserActions } from '../actions/user-actions';
+import { TourneyAppActions } from '../actions/tourney-app-actions';
 import { AppState } from '../reducers';
 
 // Avoid name not found warnings
@@ -16,7 +16,10 @@ export class Auth {
   // Configure Auth0
   lock = new Auth0Lock(myConfig.clientID, myConfig.domain, {});
 
-  constructor(private store: Store<AppState>, private userActions: UserActions) {
+  constructor(
+    private store: Store<AppState>,
+    private appActions: TourneyAppActions
+  ) {
     this.lock.on('authenticated', (authResult) => {
       this.lock.getProfile(authResult.idToken, (error, profile) => {
         if (error) {
@@ -43,7 +46,7 @@ export class Auth {
         profileId: profile.user_id,
         authToken: authToken
       };
-      this.store.dispatch(this.userActions.userLogInAction(user));
+      this.store.dispatch(this.appActions.userActions.userLogInAction(user));
     }
   }
 
@@ -61,8 +64,8 @@ export class Auth {
     // Remove token from localStorage
     localStorage.removeItem(this.ID_TOKEN_STORAGE_ITEM);
     localStorage.removeItem(this.PROFILE_STORAGE_ITEM);
-    this.store.dispatch(this.userActions.userLoggedOutAction());
-    this.store.dispatch(this.userActions.userLogOutAction());
+    this.store.dispatch(this.appActions.userActions.userLoggedOutAction());
+    this.store.dispatch(this.appActions.userActions.userLogOutAction());
     // @TODO log out user by redirecting them to logout page in auth0
     // window.location.href='http://' + myConfig.domain + '/v2/logout?returnTo=http%3A%2F%2Flocalhost%3A4020';
   };

@@ -2,10 +2,13 @@ import { Component, OnInit, Inject } from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { Location } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
+import { Store } from '@ngrx/store';
+import { AppState } from '../../reducers';
 
 import { Tourney } from '../../models/tourney-model';
+import { TourneyState } from '../../models/tourney-state-model';
 import { TourneyService } from '../../service/tourney-service';
-
+import { TourneyAppActions } from '../../actions/tourney-app-actions';
 
 @Component({
   selector: 'create-new-tourney-container',
@@ -24,13 +27,6 @@ export class CreateTourneyContainer implements OnInit {
         return;
       }
       this.isEdit = true;
-      this.tourneyService.getTourney(id)
-        .then((tourney) => {
-          this.newTourney = tourney; this.initForm();
-        })
-        .catch((error) => {
-          console.log('error getting tourney');
-        });
     });
   }
 
@@ -38,13 +34,16 @@ export class CreateTourneyContainer implements OnInit {
     private location: Location,
     private router: Router,
     private route: ActivatedRoute,
+    private appActions: TourneyAppActions,
     private tourneyService: TourneyService,
+    private store: Store<AppState>,
     @Inject(FormBuilder) formBuilder: FormBuilder) {
     this.formBuilder = formBuilder;
-    this.initForm();
+    store.select('tourney').subscribe((tourney: TourneyState) => { this.newTourney = tourney.tourney; this.initForm() });
   }
 
   private initForm() {
+    console.log('init form() with tourney ' + JSON.stringify(this.newTourney));
     this.createTourneyForm = this.formBuilder.group({
       name: [
         (this.newTourney && this.newTourney.name) || '',
@@ -177,11 +176,8 @@ export class CreateTourneyContainer implements OnInit {
            this.router.navigate(['/viewtourney/' + this.newTourney._id]);
          });
     } else {
-      this.tourneyService
-        .createTourney(newTourney)
-        .then((tourney) => {
-          this.router.navigate(['/viewtourney/' + tourney._id]);
-        });
+      console.log('sending create tourney action');
+      this.store.dispatch(this.appActions.tourneyActions.tourneyCreateAction(newTourney));
     }
   }
 

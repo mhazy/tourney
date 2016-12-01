@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Tourney } from '../models/tourney-model';
+import { ResponseEnum } from '../models/response-enum';
 import { ResponseMessage } from '../models/response-message-model';
 import { Headers, Http } from '@angular/http';
 import 'rxjs/add/operator/toPromise';
@@ -43,17 +44,13 @@ export class TourneyService {
     .catch(this.handleLoginUserError);
   }
 
-  createTourney(tourney: Tourney): Promise<Tourney> {
+  createTourney(tourney: Tourney): Promise<ResponseMessage> {
     const url = `${this.tourneyAPIUrl}`;
-    console.log('posting to ' + url);
     tourney.owner = this.user._id;
     return this.http
       .post(url, JSON.stringify(tourney), { headers: this.headers })
       .toPromise()
-      .then((response) => {
-        return JSON.parse(response.json().message);
-      })
-      .catch(this.handleCreateTourneyError);
+      .then((response) => response.json());
   }
 
   deleteTourney(tourneyId: string): Promise<Tourney> {
@@ -74,6 +71,24 @@ export class TourneyService {
       .toPromise()
       .then(response => JSON.parse(response.json().message))
       .catch(this.handleGetTourneyError);
+  }
+
+  getAllTourneysList(): Promise<ResponseMessage> {
+    const url = `${this.tourneyAPIUrl}list/all`;
+    return this.http
+      .get(url, { headers: this.headers })
+      .toPromise()
+      .then(response => response.json())
+      .catch(this.handleGetTourneysError);
+  }
+
+  getMyTourneysList(): Promise<ResponseMessage> {
+    const url = `${this.tourneyAPIUrl}list/my/${this.user._id}`;
+    return this.http
+      .get(url, { headers: this.headers })
+      .toPromise()
+      .then(response => response.json())
+      .catch(this.handleGetTourneysError);
   }
 
   getTourneys(): Promise<Tourney[]> {

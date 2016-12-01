@@ -1,8 +1,8 @@
 export interface Match {
-    id: number;
-    tourneyId: number;
-    player1: number;
-    player2: number;
-    datePlayed: number;
+    _id: string;
+    tourneyId: string;
+    player1: string;
+    player2: string;
+    datePlayed: Date;
     score?: Object;
 };

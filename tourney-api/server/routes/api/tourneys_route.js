@@ -27,11 +27,39 @@ module.exports = function(tourneys) {
   });
 
   /*
-   * Get all trouneys.
+   * Get all tourneys.
    */
   router.get('/', function(request, response) {
     tourneys.getAllTourneys()
     .then((tourneys) => {
+      ResponseMessage.respondWithSuccess(response, tourneys || []);
+    })
+    .catch((error) => {
+      ResponseMessage.respondWithFail(response, error);
+    });
+  });
+
+  /*
+   * Get a list of all tourneys.
+   */
+  router.get('/list/all', function(request, response) {
+    tourneys.getAllTourneysList()
+    .then((tourneys) => {
+      ResponseMessage.respondWithSuccess(response, tourneys || []);
+    })
+    .catch((error) => {
+      ResponseMessage.respondWithFail(response, error);
+    });
+  });
+
+  /*
+   * Get a list of tourneys owned by give user.
+   */
+  router.get('/list/my/:userId', function(request, response) {
+    const userId = request.params.userId;
+    tourneys.getMyTourneysList(userId)
+    .then((tourneys) => {
+      console.log('go my tourneys ' + JSON.stringify(tourneys));
       ResponseMessage.respondWithSuccess(response, tourneys || []);
     })
     .catch((error) => {
