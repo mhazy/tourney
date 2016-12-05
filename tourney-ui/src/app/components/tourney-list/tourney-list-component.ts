@@ -1,6 +1,5 @@
 import { Component, Input} from '@angular/core';
 import { Router } from '@angular/router';
-
 import { Tourney } from '../../models/tourney-model';
 
 @Component({
@@ -14,4 +13,8 @@ export class TourneyListComponent {
   tourneys: Array<Tourney>;
   @Input()
   refresh: Function;
+  @Input()
+  goToViewTourney: Function;
+  @Input()
+  goToCreateTourney: Function;
 }

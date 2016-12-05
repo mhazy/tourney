@@ -9,7 +9,6 @@ import { EffectsModule } from '@ngrx/effects';
 import { UserEffects } from './effects/user-effects';
 import { TourneyEffects } from './effects/tourney-effects';
 
-import { TourneyAppActions } from './actions/tourney-app-actions';
 import reducer from './reducers';
 
 import { AUTH_PROVIDERS } from 'angular2-jwt';
@@ -17,7 +16,6 @@ import { Auth } from './service/auth-service';
 
 import { AppComponent } from './app.component';
 import { routing } from './app.routing';
-
 import { WelcomePageContainer } from './containers/welcome-page/welcome-page-container';
 import { CreateTourneyContainer } from './containers/create-tourney/create-tourney-container';
 import { ViewTourneysContainer } from './containers/view-tourneys/view-tourneys-container';
@@ -50,7 +48,6 @@ import { TourneyListComponent } from './components/tourney-list/tourney-list-com
     TourneyListComponent,
   ],
   providers: [
-    TourneyAppActions,
     TourneyService,
     Auth,
     AUTH_PROVIDERS

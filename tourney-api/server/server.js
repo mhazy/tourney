@@ -47,7 +47,7 @@ app.use(express.static(__dirname + '/public'));
 /*
 * Secure API and require authorization
 */
-//app.use('/api', jwtCheck);
+app.use('/api', jwtCheck);
 
 /*
  * Handle confused requests.

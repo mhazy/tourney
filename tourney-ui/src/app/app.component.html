@@ -32,10 +32,9 @@
 </div>
 <div *ngIf="user && user.authToken">
   <div>
-    <a routerLink="/viewalltourneys">View All Tournaments</a>
-    <a routerLink="/viewmytourneys">View My Tournaments</a>
-    <a routerLink="/viewtourneys">View Tournaments</a>
-    <a routerLink="/createtourney">Create New Tournament</a>
+    <button (click)="goToRoute(routes.view_all_tourneys)">View All Tournaments</button>
+    <button (click)="goToRoute(routes.view_my_tourneys)">View My Tournaments</button>
+    <button (click)="goToRoute(routes.create_new_tourney)">Create New Tournament</button>
   </div>
 </div>
 <router-outlet></router-outlet>

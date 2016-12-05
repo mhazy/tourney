@@ -8,7 +8,7 @@ import { AppState } from '../../reducers';
 import { Tourney } from '../../models/tourney-model';
 import { TourneyState } from '../../models/tourney-state-model';
 import { TourneyService } from '../../service/tourney-service';
-import { TourneyAppActions } from '../../actions/tourney-app-actions';
+import appActions from '../../actions/tourney-app-actions';
 
 @Component({
   selector: 'create-new-tourney-container',
@@ -34,7 +34,6 @@ export class CreateTourneyContainer implements OnInit {
     private location: Location,
     private router: Router,
     private route: ActivatedRoute,
-    private appActions: TourneyAppActions,
     private tourneyService: TourneyService,
     private store: Store<AppState>,
     @Inject(FormBuilder) formBuilder: FormBuilder) {
@@ -65,26 +64,26 @@ export class CreateTourneyContainer implements OnInit {
       ],
       registration: this.formBuilder.group({
         start: [
-          (this.newTourney && this.formatDateToString(this.newTourney.registration.start)) || this.formatDateToString(),
+          (this.newTourney && this.newTourney.registration && this.formatDateToString(this.newTourney.registration.start)) || this.formatDateToString(),
           [
             Validators.required
           ]
         ],
         end: [
-          (this.newTourney && this.formatDateToString(this.newTourney.registration.end)) || '',
+          (this.newTourney && this.newTourney.registration && this.formatDateToString(this.newTourney.registration.end)) || '',
           [
           ]
         ]
       }),
       duration: this.formBuilder.group({
         start: [
-          (this.newTourney && this.formatDateToString(this.newTourney.duration.start)) || this.formatDateToString(),
+          (this.newTourney && this.newTourney.duration && this.formatDateToString(this.newTourney.duration.start)) || this.formatDateToString(),
           [
             Validators.required
           ]
         ],
         end: [
-          (this.newTourney && this.formatDateToString(this.newTourney.duration.end)) || '',
+          (this.newTourney && this.newTourney.duration && this.formatDateToString(this.newTourney.duration.end)) || '',
           [
           ]
         ]
@@ -98,7 +97,7 @@ export class CreateTourneyContainer implements OnInit {
           ]
         ],
         max: [
-          (this.newTourney && this.newTourney.participants.max) || 2,
+          (this.newTourney && this.newTourney.participants && this.newTourney.participants.max) || 2,
           [
             this.validateInteger(2)
           ]
@@ -177,7 +176,7 @@ export class CreateTourneyContainer implements OnInit {
          });
     } else {
       console.log('sending create tourney action');
-      this.store.dispatch(this.appActions.tourneyActions.tourneyCreateAction(newTourney));
+      this.store.dispatch(appActions.tourneyActions.tourneyCreateAction(newTourney));
     }
   }
 

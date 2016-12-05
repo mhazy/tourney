@@ -3,11 +3,11 @@
   <button (click)="refresh()">Refresh</button>
   <div *ngIf="!tourneys || tourneys.length === 0">
     <h3>No tournaments available.</h3>
-    <a routerLink="/createtourney">Create a tournament.</a>
+    <button (click)="goToCreateTourney()">Create Tournament</button>
   </div>
   <ol *ngIf="tourneys.length > 0" style="display: inline-block;">
     <li *ngFor='let tourney of tourneys'>
-      <a routerLink="/viewtourney/{{tourney._id}}">{{tourney.name}}</a>
+      <a (click)="goToViewTourney(tourney._id)">{{tourney.name}}</a>
     </li>
   </ol>
 </div>

@@ -1,7 +1,7 @@
 import { ActionReducer, Action } from '@ngrx/store';
 
 import { Tourney } from '../models/tourney-model';
-import { TourneyActionTypes } from '../actions/tourney-actions';
+import appActions from '../actions/tourney-app-actions';
 import { TourneyState } from '../models/tourney-state-model';
 
 const initState: TourneyState = {
@@ -15,20 +15,16 @@ const initState: TourneyState = {
 }
 
 export const TourneyReducer: ActionReducer<TourneyState> = (state: TourneyState = initState, action: Action) => {
-  console.log('in tourney reducer');
-  console.log('action = ' + JSON.stringify(action));
-  console.log('state = ' + JSON.stringify(state));
-  
   const newState = <TourneyState>JSON.parse(JSON.stringify(state));
-
+  console.log('state = ' + JSON.stringify(newState));
   switch (action.type) {
-    case TourneyActionTypes.TOURNEY_GOT_ALL_LIST:
+    case appActions.tourneyActions.TOURNEY_GOT_ALL_LIST:
       newState.allTourneysList = action.payload;
       return newState;
-    case TourneyActionTypes.TOURNEY_GOT_MY_LIST:
+    case appActions.tourneyActions.TOURNEY_GOT_MY_LIST:
       newState.myTourneysList = action.payload;
       return newState;
-    case TourneyActionTypes.TOURNEY_CREATED_ACTION:
+    case appActions.tourneyActions.TOURNEY_CREATED_ACTION:
       newState.tourney = action.payload;
       return newState;
     default:
