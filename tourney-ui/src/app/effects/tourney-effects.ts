@@ -9,6 +9,13 @@ import { ResponseEnum } from '../models/response-enum';
 
 @Injectable()
 export class TourneyEffects {
+
+  @Effect() createdTourney$ = this.actions$
+    .ofType(appActions.tourneyActions.TOURNEY_CREATED_ACTION)
+    .map((response) => {
+      return appActions.routeActions.route_to_view_tourney(response.payload._id);
+    });
+
   @Effect() createTourney$ = this.actions$
     .ofType(appActions.tourneyActions.TOURNEY_CREATE_ACTION)
     .switchMap((action) => this.tourneyService.createTourney(action.payload))

@@ -16,7 +16,6 @@ const initState: TourneyState = {
 
 export const TourneyReducer: ActionReducer<TourneyState> = (state: TourneyState = initState, action: Action) => {
   const newState = <TourneyState>JSON.parse(JSON.stringify(state));
-  console.log('state = ' + JSON.stringify(newState));
   switch (action.type) {
     case appActions.tourneyActions.TOURNEY_GOT_ALL_LIST:
       newState.allTourneysList = action.payload;
