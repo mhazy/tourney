@@ -6,10 +6,21 @@ module.exports = function(tourneyModel) {
     return new ObjectId();
   };
 
+  const getMyTourneysList = function(userId) {
+    console.log('trying to get tourneys for ' + userId);
+    const tourneyList = tourneyModel.find({ owner: userId}, {name: 1});
+    return tourneyList.exec();
+  };
+
+  const getAllTourneysList = function() {
+    const tourneyList = tourneyModel.find({}, {name: 1});
+    return tourneyList.exec();
+  };
+
   const getAllTourneys = function() {
     const tourneys = tourneyModel.find({});
     return tourneys.exec();
-  }
+  };
 
   const findTourney = function(query) {
     const tourney = tourneyModel.findOne(query);
@@ -58,7 +69,9 @@ module.exports = function(tourneyModel) {
   }
 
   return {
+    getMyTourneysList,
     getAllTourneys,
+    getAllTourneysList,
     createTourney,
     getTourney,
     findTourney,

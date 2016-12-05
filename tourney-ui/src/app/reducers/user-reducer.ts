@@ -1,7 +1,7 @@
 import { ActionReducer, Action } from '@ngrx/store';
 
 import { User } from '../models/user-model';
-import { UserActions } from '../actions/user-actions';
+import appActions from '../actions/tourney-app-actions';
 
 export type UserState = User;
 
@@ -16,9 +16,9 @@ const initState: UserState = {
 
 export const UserReducer: ActionReducer<UserState> = (state: UserState = initState, action: Action) => {
   switch (action.type) {
-    case UserActions.USER_LOGGED_IN_ACTION:
+    case appActions.userActions.USER_LOGGED_IN_ACTION:
       return action.payload;
-    case UserActions.USER_LOGGED_OUT_ACTION:
+    case appActions.userActions.USER_LOGGED_OUT_ACTION:
       return initState;
     default:
       return state;

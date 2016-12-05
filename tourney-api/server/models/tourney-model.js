@@ -21,5 +21,5 @@ module.exports = {
   },
   playoffs: String,
   schedule: String,
-  players: [],
+  players: Array,
 };
